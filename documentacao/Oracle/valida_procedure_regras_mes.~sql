@@ -1,0 +1,27 @@
+BEGIN 
+
+orcamento_contabil.PRC_DUPLICA_REGRAS_MES('04/2022','05/2022','HSSAMPAIO');
+
+END;
+
+--SELECT * FROM orcamento_contabil.CONTA_CONTABIL;
+--SELECT * FROM GRUPO_ORCADO;
+
+SELECT * 
+FROM orcamento_contabil.GRUPO_ORCADO;
+
+SELECT * FROM orcamento_contabil.CONTA_CONTABIL;
+
+UPDATE orcamento_contabil.CONTA_CONTABIL cc
+SET cc.CD_GRUPO_ORCADO = (SELECT CD_GRUPO_ORCADO 
+                          FROM orcamento_contabil.GRUPO_ORCADO
+                          WHERE DS_GRUPO_ORCADO || '-' || VL_ORCADO IN (
+                            SELECT DS_GRUPO_ORCADO || '-' || VL_ORCADO AS CRUZAMENTO
+                            FROM orcamento_contabil.GRUPO_ORCADO gpo
+                            WHERE CD_GRUPO_ORCADO IN (SELECT CD_GRUPO_ORCADO 
+                                                      FROM orcamento_contabil.CONTA_CONTABIL 
+                                                      WHERE CD_CONTA_CONTABIL = cc.CD_GRUPO_ORCADO))
+                          AND PERIODO = '04/2022' --CAMPO DA PROCEDURE COPIA
+                          )
+WHERE cc.SN_GRUPO_ORCADO = 'S'
+AND cc.PERIODO = '05/2022' --CAMPO DA PROCEDURE ATUAL
