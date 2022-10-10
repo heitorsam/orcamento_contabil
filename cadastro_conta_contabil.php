@@ -88,11 +88,176 @@
 
     <?php 
 
+        //////////////////////////////////////////
+        ////LISTAR TOTALIZADOR CONTA CONTABIL/////
+        //////////////////////////////////////////
+ 
+       $lista_totalizador = "SELECT res.PERIODO,
+                             CASE 
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'RESULTADO' THEN 1
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'RECEITA' THEN 2
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'DESPESA' THEN 3
+                             END AS ORDEM,
+                             CASE 
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'RESULTADO' AND res.VL_REALIZADO >= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'RECEITA' AND res.VL_REALIZADO >= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                 WHEN res.CLASSIFICACAO_CONTABIL = 'DESPESA' AND res.VL_REALIZADO <= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                 ELSE ' <i class=||fas fa-arrow-down||></i>'
+                             END AS SETA,
+                             res.CLASSIFICACAO_CONTABIL,
+                             res.VL_ORCADO, res.VL_REALIZADO,
+                             (res.VL_REALIZADO - res.VL_ORCADO)AS VARIACAO,
+                             (ROUND(((res.VL_REALIZADO / NULLIF(res.VL_ORCADO,0)) - 1) * 100,2)) AS PORC_VARIACAO
+                             
+                             
+                             FROM(
+
+                             SELECT DISTINCT tt.PERIODO, 'RESULTADO' AS CLASSIFICACAO_CONTABIL, 
+                             
+
+                             (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
+                                 FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                 WHERE aux.PERIODO = tt.PERIODO
+                                 AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                 
+                                 -
+                                 
+                                 (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
+                                 FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                 WHERE aux.PERIODO = tt.PERIODO
+                                 AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_ORCADO,
+                                 
+
+                             (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
+                                 FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                 WHERE aux.PERIODO = tt.PERIODO
+                                 AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                 
+                                 -
+                                 
+                                 (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
+                                 FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                 WHERE aux.PERIODO = tt.PERIODO
+                                 AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_REALIZADO
+                                 
+
+                             FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
+
+                            if($var_setor <> 'Todos'){
+                                $lista_totalizador .= " WHERE tt.CD_SETOR = '$var_setor'";
+                            }
+
+                            $lista_totalizador .= " UNION ALL
+                            
+                             SELECT tt.PERIODO, tt.CLASSIFICACAO_CONTABIL, SUM(tt.VL_ORCADO) AS VL_ORCADO, SUM(tt.VL_REALIZADO) AS VL_REALIZADO
+                             FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
+
+                             if($var_setor <> 'Todos'){
+                                $lista_totalizador .= " WHERE tt.CD_SETOR = '$var_setor'";
+                            }
+
+                            $lista_totalizador .= "
+                             GROUP BY tt.PERIODO, tt.CLASSIFICACAO_CONTABIL
+                             
+                             ) res
+                             
+                             WHERE res.PERIODO = '$var_periodo'
+                             AND res.CLASSIFICACAO_CONTABIL <> 'DESPESA'
+                            ORDER BY 2 ASC";
+
+
+        //echo $lista_totalizador;
+
+        $result_totalizador = oci_parse($conn_ora, $lista_totalizador);
+
+        @oci_execute($result_totalizador);
+
+        //////////////////////////////////////////////////
+        ////LISTAR TOTALIZADOR CONTA CONTABIL DESPESA/////
+        //////////////////////////////////////////////////
+
+        $lista_totalizador_desp = "SELECT res.PERIODO,
+                                   CASE 
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'RESULTADO' THEN 1
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'RECEITA' THEN 2
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'DESPESA' THEN 3
+                                   END AS ORDEM,
+                                   CASE 
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'RESULTADO' AND res.VL_REALIZADO >= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'RECEITA' AND res.VL_REALIZADO >= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                       WHEN res.CLASSIFICACAO_CONTABIL = 'DESPESA' AND res.VL_REALIZADO <= res.VL_ORCADO THEN ' <i class=||fas fa-arrow-up||></i>'
+                                       ELSE ' <i class=||fas fa-arrow-down||></i>'
+                                   END AS SETA,
+                                   res.CLASSIFICACAO_CONTABIL,
+                                   res.VL_ORCADO, res.VL_REALIZADO,
+                                   (res.VL_REALIZADO - res.VL_ORCADO)AS VARIACAO,
+                                   (ROUND(((res.VL_REALIZADO / NULLIF(res.VL_ORCADO,0)) - 1) * 100,2)) AS PORC_VARIACAO
+                                   
+                                   
+                                   FROM(
+
+                                   SELECT DISTINCT tt.PERIODO, 'RESULTADO' AS CLASSIFICACAO_CONTABIL, 
+                                   
+
+                                   (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
+                                       FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                       WHERE aux.PERIODO = tt.PERIODO
+                                       AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                       
+                                       -
+                                       
+                                       (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
+                                       FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                       WHERE aux.PERIODO = tt.PERIODO
+                                       AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_ORCADO,
+                                       
+
+                                   (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
+                                       FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                       WHERE aux.PERIODO = tt.PERIODO
+                                       AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                       
+                                       -
+                                       
+                                       (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
+                                       FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
+                                       WHERE aux.PERIODO = tt.PERIODO
+                                       AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_REALIZADO
+                                       
+
+                                   FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
+
+                                  if($var_setor <> 'Todos'){
+                                      $lista_totalizador_desp .= " WHERE tt.CD_SETOR = '$var_setor'";
+                                  }
+
+                                  $lista_totalizador_desp .= " UNION ALL
+                                  
+                                   SELECT tt.PERIODO, tt.CLASSIFICACAO_CONTABIL, SUM(tt.VL_ORCADO) AS VL_ORCADO, SUM(tt.VL_REALIZADO) AS VL_REALIZADO
+                                   FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
+
+                                   if($var_setor <> 'Todos'){
+                                      $lista_totalizador_desp .= " WHERE tt.CD_SETOR = '$var_setor'";
+                                  }
+
+                                  $lista_totalizador_desp .= "
+                                   GROUP BY tt.PERIODO, tt.CLASSIFICACAO_CONTABIL
+                                   
+                                   ) res
+                                   
+                                   WHERE res.PERIODO = '$var_periodo'
+                                   AND res.CLASSIFICACAO_CONTABIL = 'DESPESA'
+                                  ORDER BY 2 ASC";
+
+            $result_totalizador_desp = oci_parse($conn_ora, $lista_totalizador_desp);
+
+            @oci_execute($result_totalizador_desp);
+
         //////////////////////////////
         ////LISTAR CONTA CONTABIL/////
         //////////////////////////////    
  
-        $lista_conta_contabil = "SELECT vrc.*, 
+       $lista_conta_contabil = "SELECT vrc.*, 
                                     (SELECT CASE
                                 WHEN COUNT(*) > 1 THEN 'S'
                                 ELSE 'N'
@@ -172,8 +337,11 @@
                                     $lista_conta_contabil .= " AND vrc.CD_SETOR = '$var_setor'";
                                  }
 
-                                 $lista_conta_contabil .= " ORDER BY vrc.CLASSIFICACAO_CONTABIL ASC, vrc.DS_SETOR ASC, vrc.ORDEM ASC, vrc.CD_CONTA_MV ASC";
+                                 $lista_conta_contabil .= " ORDER BY vrc.CLASSIFICACAO_CONTABIL DESC, vrc.DS_SETOR ASC, vrc.ORDEM ASC, vrc.CD_CONTA_MV ASC";
 
+        
+        //echo $lista_conta_contabil;
+        
         $result_conta_contabil = oci_parse($conn_ora, $lista_conta_contabil);
 
         @oci_execute($result_conta_contabil);
@@ -203,134 +371,92 @@
 
         <tbody>
             <?php
-            $var_modal_editar = 1;
-            $var_modal_excluir = 1;
             $var_group_orcado = 'Inicio';
-            $var_desc_mv = 'Inicio';
-            $var_ult_classificacao = 'Desconsiderar';
-            $var_ult_grupo_orcado = 0;
-            $var_total_orcado_despesa = 0;
-            $var_total_realizado_despesa = 0;
-            $var_total_orcado_receita = 0;
-            $var_total_realizado_receita = 0;
-            $var_cont_despesa = 0;
-            $var_cont_receita = 0;
-            $var_final_orcado_despesa = 0;
-            $var_final_realizado_despesa = 0;
-            $var_final_orcado_receita = 0;
-            $var_final_realizado_receita = 0;  
-            $var_ativa_despesa = 'S';           
+            $var_cont_while_cc = 0;
+            $var_class_cc = 'RECEITA';
+            $var_count_desp = 0;
 
             while($row_conta_contabil = @oci_fetch_array($result_conta_contabil)){
+
+                if($var_cont_while_cc == 0){
+
+                    while($row_tt = @oci_fetch_array($result_totalizador)){
+
+            ?>
+
+                        <!-- TOTALIZADOR RESULTADO E RECEITA-->
+
+                        <tr style="background-color: #0271c1; color: #ffffff;">
+                           <!--COLUNAS-->
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span>TOTAL <?php echo @$row_tt['CLASSIFICACAO_CONTABIL']; ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_ORCADO'], 2, ',', '.' ); ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VARIACAO'], 2, ',', '.' ) . @$row_tt['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @$row_tt['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                       </tr> 
+
+            <?php
+       
+
+                    }
+
+
+                }
                 
-                if(isset($row_conta_contabil['CD_GRUPO_ORCADO']) AND $var_ult_grupo_orcado == $row_conta_contabil['CD_GRUPO_ORCADO']){
-                      
-                    //APENAS SOMA REALIZADO
-                    if($row_conta_contabil['CLASSIFICACAO_CONTABIL'] == 'DESPESA'){
-                        
-                        @$var_total_realizado_despesa += @$row_conta_contabil['VL_REALIZADO'];
-                        
-                    }
+                if($row_conta_contabil['CLASSIFICACAO_CONTABIL'] <> $var_class_cc AND $var_count_desp == 0){
 
-                    if($row_conta_contabil['CLASSIFICACAO_CONTABIL'] == 'RECEITA'){
-                         
-                        @$var_total_realizado_receita += @$row_conta_contabil['VL_REALIZADO'];
-                    }
+                    while($row_tt_desp = @oci_fetch_array($result_totalizador_desp)){
 
-                }else{
-                    
-                    //SOMA ORCADO E REALIZADO
-                    if($row_conta_contabil['CLASSIFICACAO_CONTABIL'] == 'DESPESA'){
-                         $var_cont_despesa = $var_cont_despesa + 1;
-                        @$var_total_orcado_despesa += @$row_conta_contabil['VL_ORCADO'];
-                        @$var_total_realizado_despesa += @$row_conta_contabil['VL_REALIZADO'];
+            ?>
 
-                    }
+                        <!-- TOTALIZADOR RESULTADO DEPESA-->
 
-                    if($row_conta_contabil['CLASSIFICACAO_CONTABIL'] == 'RECEITA'){
-                         $var_cont_receita = $var_cont_receita + 1;
-                        @$var_total_orcado_receita += @$row_conta_contabil['VL_ORCADO'];
-                        @$var_total_realizado_receita += @$row_conta_contabil['VL_REALIZADO'];
+                        <tr style="background-color: #0271c1; color: #ffffff;">
+                           <!--COLUNAS-->
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span>TOTAL <?php echo @$row_tt_desp['CLASSIFICACAO_CONTABIL']; ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VL_ORCADO'], 2, ',', '.' ); ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VARIACAO'], 2, ',', '.' ) . @$row_tt_desp['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @$row_tt_desp['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                       </tr> 
+
+            <?php
+       
 
                     }
+
+                    $var_count_desp = 1;
 
                 }
 
-                //CALCULANDO DADOS     
-                $var_seta_totalizador = ' <i class="fas fa-arrow-down"></i>';
 
-                if($var_ult_classificacao == 'DESPESA'){
-        
-                    @$var_total_orcado = @$var_total_orcado_despesa; 
-                    @$var_total_realizado = @$var_total_realizado_despesa;
 
-                    if(@$var_total_realizado < @$var_total_orcado){
 
-                        $var_seta_totalizador = ' <i class="fas fa-arrow-up"></i>';
 
-                    }
 
+
+
+                if(!isset($row_conta_contabil['CD_GRUPO_ORCADO'])){
+                    $color = 'rgba(0,0,0,0)';
                 }else{
-
-                    //RECEITA
-                    @$var_total_orcado_receita = @$var_total_orcado_receita; 
-                    @$var_total_realizado_receita = @$var_total_realizado_receita;
-
-                    if(@$var_total_realizado > @$var_total_orcado){
-
-                        $var_seta_totalizador = ' <i class="fas fa-arrow-up"></i>';
-
-                    }
-
-                }   
-
-                if($var_ult_classificacao <> $row_conta_contabil['CLASSIFICACAO_CONTABIL']
-                        AND $var_ult_classificacao <> 'Desconsiderar'){                                  
-                        
-                ?>
-                        <!-- TOTALIZADOR DESPESA -->
-                        <tr style="background-color: #3185c1; color: #ffffff;">
-                            <!--COLUNAS-->
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span>TOTAL DESPESA</span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_orcado_despesa, 2, ',', '.' ); ?></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_realizado_despesa, 2, ',', '.' ); ?></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format((@$var_total_realizado_despesa - @$var_total_orcado_despesa), 2, ',', '.' ) . $var_seta_totalizador; ?></span></th></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><?php echo @number_format((((@$var_total_realizado_despesa / @$var_total_orcado_despesa)-1)*100), 2, ',', '.' ) . '%' . $var_seta_totalizador; ?></span></th></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        </tr> 
-                        
-                    <?php 
-
-
-                        $var_ativa_despesa = 'N';  
-                    
-                    }
-                                    
-                    $var_final_orcado_despesa = $var_total_orcado_despesa;
-                    $var_final_realizado_despesa = $var_total_realizado_despesa;
-
-                    $var_ult_classificacao = $row_conta_contabil['CLASSIFICACAO_CONTABIL']; 
-
-                    $var_ult_grupo_orcado = $row_conta_contabil['CD_GRUPO_ORCADO']; 
-
-                ?>
-
-                <?php
-
-                    if(!isset($row_conta_contabil['CD_GRUPO_ORCADO'])){
-                        $color = 'rgba(0,0,0,0)';
-                    }else{
-                        $color = '#e0edfa'; 
-                    }
-                    
-                ?>
-
+                    $color = '#e0edfa'; 
+                }
+                
+            ?>
                 <tr>
                     <td class='align-middle' id="CD_SETOR<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>" style='text-align: center; background-color:<?php echo $color ?>!important;' ondblclick="fnc_editar_campo('orcamento_contabil.conta_contabil', 'CD_SETOR', '<?php echo @$row_conta_contabil['DS_SETOR']; ?>', 'CD_CONTA_CONTABIL', '<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>', 'SELECT DS_SETOR AS COLUNA_DS,CD_SETOR AS COLUNA_VL FROM orcamento_contabil.SETOR')" ><?php echo @$row_conta_contabil['DS_SETOR']; ?></td>
                     <td class='align-middle' id="ORDEM<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>" style='text-align: center; background-color:<?php echo $color ?>!important;' ondblclick="fnc_editar_campo('orcamento_contabil.conta_contabil', 'ORDEM', '<?php echo @$row_conta_contabil['ORDEM']; ?>', 'CD_CONTA_CONTABIL', '<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>', '')" ><?php echo @$row_conta_contabil['ORDEM']; ?></td>
@@ -457,113 +583,6 @@
                     $var_group_orcado = @$row_conta_contabil['CD_GRUPO_ORCADO'];
                     
                 } ?>
-
-                <?php
-
-                    $var_seta_totalizador = ' <i class="fas fa-arrow-down"></i>';
-
-                    @$var_total_orcado = @$var_total_orcado_receita; 
-                    @$var_total_realizado = @$var_total_realizado_receita;
-
-                    if(@$var_total_realizado > @$var_total_orcado){
-
-                        $var_seta_totalizador = ' <i class="fas fa-arrow-up"></i>';
-
-                    }
-
-                    if($var_ativa_despesa == 'S' AND $var_cont_despesa >= 1){ 
-                        
-                        @$var_total_orcado = @$var_final_orcado_despesa; 
-                        @$var_total_realizado = @$var_total_realizado_receita;
-
-                        if(@$var_total_realizado < @$var_total_orcado){
-
-                            $var_seta_totalizador = ' <i class="fas fa-arrow-up"></i>';
-
-
-                        }
-                        
-                ?>
-                        <!-- TOTALIZADOR DESPESA -->
-                        <tr style="background-color: #3185c1; color: #ffffff;">
-                            <!--COLUNAS-->
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span>TOTAL DESPESA</span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_orcado_despesa, 2, ',', '.' ); ?></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_realizado_despesa, 2, ',', '.' ); ?></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_realizado_despesa - @$var_total_orcado_despesa, 2, ',', '.' ) . $var_seta_totalizador; ?></span></th></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><?php echo @number_format(((@$var_total_realizado_despesa / @$var_total_orcado_despesa)-1)*100, 2, ',', '.' ) . '%' . $var_seta_totalizador; ?></span></th></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        </tr> 
-                        
-                    <?php 
-
-                            $var_final_orcado_despesa = $var_total_orcado;
-                            $var_final_realizado_despesa = $var_total_realizado;
-
-                    ?>
-
-                <?php }
-                    
-                ?>
-
-                    <!-- TOTALIZADOR RECEITA -->
-                    <tr style="background-color: #3185c1; color: #ffffff;">
-                        <!--COLUNAS-->
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span>TOTAL RECEITA</span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_orcado_receita, 2, ',', '.' ); ?></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_realizado_receita, 2, ',', '.' ); ?></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format((@$var_total_realizado_receita - @$var_total_orcado_receita), 2, ',', '.' ) . $var_seta_totalizador; ?></span></th></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><?php echo @number_format((((@$var_total_realizado_receita / @$var_total_orcado_receita)-1)*100), 2, ',', '.' ) . '%' . $var_seta_totalizador; ?></span></th></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                        <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    </tr> 
-                
-                <?php 
-
-                        $var_final_orcado_receita = $var_total_orcado_receita;
-                        $var_final_realizado_receita = $var_total_realizado_receita; 
-
-                        $var_seta_totalizador = ' <i class="fas fa-arrow-down"></i>';
-
-                        @$var_total_orcado = @$var_final_orcado_receita - @$var_final_orcado_despesa; 
-                        @$var_total_realizado = @$var_final_realizado_receita - @$var_final_realizado_despesa;
-
-                        if(@$var_total_realizado > @$var_total_orcado){
-
-                            $var_seta_totalizador = ' <i class="fas fa-arrow-up"></i>';
-
-                        }
-
-                ?>
-
-                 <!-- TOTALIZADOR RESULTADO -->
-
-                 <tr style="background-color: #0271c1; color: #ffffff;">
-                    <!--COLUNAS-->
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span>TOTAL RESULTADO</span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_orcado, 2, ',', '.' ); ?></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$var_total_realizado, 2, ',', '.' ); ?></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format((@$var_total_realizado - @$var_total_orcado), 2, ',', '.' ) . $var_seta_totalizador; ?></span></th></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><?php echo @number_format((((@$var_total_realizado / @$var_total_orcado)-1)*100), 2, ',', '.' ) . '%' . $var_seta_totalizador; ?></span></th></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                    <th class="align-middle" style="text-align: center !important;"><span></span></th>
-                </tr> 
 
         </tbody>           
     </table>
