@@ -117,28 +117,56 @@
 
                              (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
                                  FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
-                                 WHERE aux.PERIODO = tt.PERIODO
-                                 AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                 WHERE aux.PERIODO = tt.PERIODO";
+
+                                if($var_setor <> 'Todos'){
+                                    
+                                    $lista_totalizador .= " AND aux.CD_SETOR = '$var_setor'";
+                                }
+
+                                 
+                                $lista_totalizador .= " AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
                                  
                                  -
                                  
                                  (SELECT SUM(aux.VL_ORCADO) AS VL_ORCADO
                                  FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
-                                 WHERE aux.PERIODO = tt.PERIODO
-                                 AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_ORCADO,
+                                 WHERE aux.PERIODO = tt.PERIODO";
+
+                                 if($var_setor <> 'Todos'){
+                                    
+                                    $lista_totalizador .= " AND aux.CD_SETOR = '$var_setor'";
+                                }
+
+                                 
+                                $lista_totalizador .= " AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_ORCADO,
                                  
 
                              (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
                                  FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
-                                 WHERE aux.PERIODO = tt.PERIODO
-                                 AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
+                                 WHERE aux.PERIODO = tt.PERIODO";
+
+                                if($var_setor <> 'Todos'){
+                                                                    
+                                    $lista_totalizador .= " AND aux.CD_SETOR = '$var_setor'";
+                                }
+
+ 
+                                $lista_totalizador .= " AND aux.CLASSIFICACAO_CONTABIL = 'RECEITA')
                                  
                                  -
                                  
                                  (SELECT SUM(aux.VL_REALIZADO) AS VL_REALIZADO
                                  FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO aux 
-                                 WHERE aux.PERIODO = tt.PERIODO
-                                 AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_REALIZADO
+                                 WHERE aux.PERIODO = tt.PERIODO";
+
+                                if($var_setor <> 'Todos'){
+                                                                    
+                                    $lista_totalizador .= " AND aux.CD_SETOR = '$var_setor'";
+                                }
+
+                                
+                                $lista_totalizador .= " AND aux.CLASSIFICACAO_CONTABIL = 'DESPESA') AS VL_REALIZADO
                                  
 
                              FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
@@ -153,6 +181,7 @@
                              FROM orcamento_contabil.VW_TOT_REC_DESP_SET_PERIODO tt";
 
                              if($var_setor <> 'Todos'){
+    
                                 $lista_totalizador .= " WHERE tt.CD_SETOR = '$var_setor'";
                             }
 
@@ -167,6 +196,7 @@
 
 
         //echo $lista_totalizador;
+       
 
         $result_totalizador = oci_parse($conn_ora, $lista_totalizador);
 
@@ -386,7 +416,20 @@
 
                         <!-- TOTALIZADOR RESULTADO E RECEITA-->
 
-                        <tr style="background-color: #0271c1; color: #ffffff;">
+                        
+                        <?php 
+                            if($row_tt['CLASSIFICACAO_CONTABIL'] == 'RESULTADO'){
+
+                                echo '<tr style="background-color: #0271c1; color: #ffffff;">';
+
+                            }else{
+
+                                echo '<tr style="background-color: #3185c1; color: #ffffff;">';
+                            }
+                        
+                        ?>
+
+                      
                            <!--COLUNAS-->
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
@@ -396,8 +439,8 @@
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_ORCADO'], 2, ',', '.' ); ?></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
-                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VARIACAO'], 2, ',', '.' ) . @$row_tt['SETA']; ?></span></th></span></th>
-                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @$row_tt['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VARIACAO'], 2, ',', '.' ) . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                        </tr> 
@@ -417,8 +460,8 @@
             ?>
 
                         <!-- TOTALIZADOR RESULTADO DEPESA-->
+                        <tr style="background-color: #3185c1; color: #ffffff;">
 
-                        <tr style="background-color: #0271c1; color: #ffffff;">
                            <!--COLUNAS-->
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
