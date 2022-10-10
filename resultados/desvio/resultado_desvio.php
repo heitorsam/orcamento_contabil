@@ -58,8 +58,8 @@
                 ?>
 
                 <?php 
-
-                    $porc_desvio = ROUND((($row_desvio['VL_REALIZADO_ROUND'] - $row_desvio['VL_ORCADO_ROUND']) / $row_desvio['VL_ORCADO_ROUND']) * 100,2);
+                    
+                    @$porc_desvio = ROUND((($row_desvio['VL_REALIZADO_ROUND'] - $row_desvio['VL_ORCADO_ROUND']) / $row_desvio['VL_ORCADO_ROUND']) * 100,2);
 
                 ?>
 
@@ -72,19 +72,20 @@
 
 
                     $var_cor_variacao_acumulado = 'red';
+                    if($soma_orcado > 0){
+                        if($var_visao == 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) < '0,5') {
+                                
+                            $var_cor_variacao_acumulado = 'green';
+                        }   
+                    } 
+                    if($soma_orcado > 0){
+                        if($var_visao <> 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) > '0,5'){
+                                
+                            $var_cor_variacao_acumulado = 'green';
+                        }   
+                    }
 
-                    if($var_visao == 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) < '0,5') {
-                            
-                        $var_cor_variacao_acumulado = 'green';
-                    }    
-                    
-                    if($var_visao <> 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) > '0,5'){
-                            
-                        $var_cor_variacao_acumulado = 'green';
-                    }   
-
-
-                    $porc_desvio_acumulado = ROUND((($soma_realizado - $soma_orcado) / $soma_orcado) * 100,2);
+                    @$porc_desvio_acumulado = ROUND((($soma_realizado - $soma_orcado) / $soma_orcado) * 100,2);
 
                 ?>
 
@@ -95,17 +96,19 @@
         <?php   
 
                 $var_cor_variacao_total = 'red';
+                if($soma_orcado > 0){
+                    if($var_visao == 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) < '0,5') {
+                            
+                        $var_cor_variacao_total = 'green';
+                    }   
+                }
 
-                if($var_visao == 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) < '0,5') {
-                        
-                    $var_cor_variacao_total = 'green';
-                }    
-                
-                if($var_visao <> 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) > '0,5'){
-                        
-                    $var_cor_variacao_total = 'green';
-                }   
-
+                if($soma_orcado > 0){
+                    if($var_visao <> 'Despesa' AND ((($soma_realizado-$soma_orcado)/$soma_orcado)*100) > '0,5'){
+                            
+                        $var_cor_variacao_total = 'green';
+                    }   
+                }
             }
     
         ?>

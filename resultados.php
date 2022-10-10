@@ -72,6 +72,7 @@
                 <?php include 'filtros/visao.php'; ?>  
             </div>
 
+
             <div class="col-3" id="div_filtro_button" style="text-align: left; background-color: #f9f9f9 !important; ">
                  <br>
                 <!-- BOTAO PESQUISAR -->
@@ -163,13 +164,13 @@
             var_div_filtro_ano.style.display = 'inline';
             var_div_filtro_visao.style.display = 'inline';
             var_div_filtro_mes.style.display = 'none';
-            var_div_filtro_setor.style.display = 'none';
+            var_div_filtro_setor.style.display = 'inline';
             var_div_filtro_periodo.style.display = 'none';
 
             var_jv_filtro_ano.required = true;
             var_jv_filtro_visao.required = true;
             var_jv_filtro_mes.required = false;
-            var_jv_filtro_setor.required = false;
+            var_jv_filtro_setor.required = true;
             var_jv_filtro_periodo.required = false;
         }  
 
