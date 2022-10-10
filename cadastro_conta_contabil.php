@@ -15,6 +15,7 @@
     //RECEBENDO POST
     $var_periodo = @$_POST["frm_periodo"]; 
     $var_setor = @$_POST["filtro_setor"];
+    $reduzido = @$_POST['frm_reduzido'];
 
     $var_periodo = @substr($var_periodo,5,2) . '/' . substr($var_periodo,0,4);
 
@@ -34,6 +35,7 @@
         @$var_periodo_filtro = @substr($_SESSION['periodo'],3,4) . '-' . @substr($_SESSION['periodo'],0,2);
 
     }
+
     
     //RECEBENDO SESSAO
     @$var_cd_usuario = @$_SESSION['usuarioLogin'];
@@ -60,8 +62,13 @@
                 <input type="month" class="form-control" name="frm_periodo" value="<?php echo $var_periodo_filtro; ?>"placeholder="Digite o período" required>
             </div>
 
-            <div class="col-md-3" style="padding: 0px !important;"> 
+            <div class="col-md-2" style="padding: 0px !important;"> 
                 <?php include 'filtros/setor.php'; ?>
+            </div>
+
+            <div class="col-md-2">
+                Reduzido:
+                <input type="number" name="frm_reduzido" id="frm_reduzido" value="<?php echo $reduzido ?>" class="form-control">
             </div>
 
             <div class="col-md-1" style="padding-right: 0px !important;"> 
@@ -287,7 +294,7 @@
         ////LISTAR CONTA CONTABIL/////
         //////////////////////////////    
  
-       $lista_conta_contabil = "SELECT vrc.*, 
+        $lista_conta_contabil = "SELECT vrc.*, 
                                     (SELECT CASE
                                 WHEN COUNT(*) > 1 THEN 'S'
                                 ELSE 'N'
@@ -366,6 +373,9 @@
                                  if($var_setor <> 'Todos'){
                                     $lista_conta_contabil .= " AND vrc.CD_SETOR = '$var_setor'";
                                  }
+                                 if($reduzido != ''){
+                                    $lista_conta_contabil .= " AND vrc.CD_CONTA_MV = $reduzido";
+                                 }
 
                                  $lista_conta_contabil .= " ORDER BY vrc.CLASSIFICACAO_CONTABIL DESC, vrc.DS_SETOR ASC, vrc.ORDEM ASC, vrc.CD_CONTA_MV ASC";
 
@@ -407,8 +417,8 @@
             $var_count_desp = 0;
 
             while($row_conta_contabil = @oci_fetch_array($result_conta_contabil)){
-
-                if($var_cont_while_cc == 0){
+           
+                if($var_cont_while_cc == 0 && $reduzido == ''){
 
                     while($row_tt = @oci_fetch_array($result_totalizador)){
 
