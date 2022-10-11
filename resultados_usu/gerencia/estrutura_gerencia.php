@@ -1,9 +1,9 @@
 <?php     
 
     //RECEBENDO POST
-    $var_periodo = @$_POST["frm_cad_periodo"]; 
-    $var_setor = @$_POST["filtro_setor"];
-    $reduzido = @$_POST['jv_reduzido'];
+    $var_periodo = $_POST["frm_cad_periodo"]; 
+    $var_setor = $_POST["filtro_setor"];
+    $reduzido = $_POST['jv_reduzido'];
 
     $var_periodo = @substr($var_periodo,5,2) . '/' . substr($var_periodo,0,4);
 
@@ -14,14 +14,13 @@
 
         @$_SESSION['periodo'] = @$var_periodo;
         @$_SESSION['cd_setor'] = @$_POST["jv_setor"];
-        @$var_periodo_filtro = $var_periodo;
+        @$var_periodo_filtro = @substr($var_periodo,3,4) . '-' . @substr($var_periodo,0,2);
     
     }else{
-        date_default_timezone_set('America/Sao_Paulo');
-        $date = date('Y-m' , time());
-        @$var_periodo = $date;
-        @$var_setor = 'Todos';
-        @$var_periodo_filtro = $date;
+
+        @$var_periodo = @$_SESSION['periodo'];
+        @$_POST["jv_filtro_setor"] = @$_SESSION['cd_setor'];
+        @$var_periodo_filtro = @substr($_SESSION['periodo'],3,4) . '-' . @substr($_SESSION['periodo'],0,2);
 
     }
 
@@ -282,7 +281,7 @@
                             WHEN vrc.VL_ORCADO - (SELECT SUM(aux.VL_REALIZADO)
                                 FROM VW_RESULTADOS_CONSOLIDADOS aux
                                 WHERE aux.CD_GRUPO_ORCADO = vrc.CD_GRUPO_ORCADO
-                                AND aux.PERIODO= '$var_periodo'
+                                AND aux.PERIODO = '$var_periodo'
                                 ) < 0
                             AND vrc.CLASSIFICACAO_CONTABIL = 'DESPESA'
                             AND vrc.CD_GRUPO_ORCADO > 0
@@ -291,7 +290,7 @@
                             WHEN vrc.VL_ORCADO  - (SELECT SUM(aux.VL_REALIZADO)
                                 FROM VW_RESULTADOS_CONSOLIDADOS aux
                                 WHERE aux.CD_GRUPO_ORCADO = vrc.CD_GRUPO_ORCADO
-                                AND aux.PERIODO= '$var_periodo'
+                                AND aux.PERIODO = '$var_periodo'
                                 ) < 0
                             AND vrc.CLASSIFICACAO_CONTABIL = 'RECEITA'
                             AND vrc.CD_GRUPO_ORCADO > 0
@@ -301,7 +300,7 @@
                             WHEN vrc.VL_ORCADO  - (SELECT SUM(aux.VL_REALIZADO)
                                 FROM VW_RESULTADOS_CONSOLIDADOS aux
                                 WHERE aux.CD_GRUPO_ORCADO = vrc.CD_GRUPO_ORCADO
-                                AND aux.PERIODO= '$var_periodo'
+                                AND aux.PERIODO = '$var_periodo'
                                 ) > 0
                             AND vrc.CLASSIFICACAO_CONTABIL = 'RECEITA'
                             AND vrc.CD_GRUPO_ORCADO > 0
@@ -319,7 +318,7 @@
                         LEFT JOIN orcamento_contabil.setor st
                                                 ON vrc.CD_SETOR = st.cd_setor                               
                                  
-                                 WHERE vrc.PERIODO= '$var_periodo'";
+                                 WHERE vrc.PERIODO = '$var_periodo'";
 
                                  if($var_setor <> 'Todos'){
                                     $lista_conta_contabil .= " AND vrc.CD_SETOR = '$var_setor'";
@@ -402,6 +401,7 @@
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VARIACAO'], 2, ',', '.' ) . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
+
                        </tr> 
 
             <?php
@@ -432,6 +432,7 @@
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VARIACAO'], 2, ',', '.' ) . @$row_tt_desp['SETA']; ?></span></th></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @$row_tt_desp['SETA']; ?></span></th></span></th>
+                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
                         </tr> 
 
             <?php
@@ -534,8 +535,54 @@
 
                     </td>  
 
-                   
                     
+                    <div class="modal fade" id="modaljustificativa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"> Justificativa </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <?php if($_SESSION['usuarioLogin'] == $row_conta_contabil['USUARIO']){ ?>
+                                                Contextualização:
+                                                <textarea class="form-control" id="justficativa_1" rows="5" maxlength="3900"></textarea>
+                                                <div class="div_br"></div>
+                                                Ações Planejadas ou Implementadas:
+                                                <textarea class="form-control" id="justficativa_2" rows="5"  maxlength="3900"></textarea>
+                                                <div class="div_br"></div>
+                                                Necessidade de atualização de Orçado:
+                                                <textarea class="form-control" id="justficativa_3" rows="5"  maxlength="3900"></textarea>
+                                            <?php }else{ ?>
+                                                Contextualização:
+                                                <textarea class="form-control" id="justficativa_1" rows="5" disabled></textarea>
+                                                <div class="div_br"></div>
+                                                Ações Planejadas ou Implementadas:
+                                                <textarea class="form-control" id="justficativa_2" rows="5" disabled></textarea>
+                                                <div class="div_br"></div>
+                                                Necessidade de atualização de Orçado:
+                                                <textarea class="form-control" id="justficativa_3" rows="5" disabled></textarea>
+                                            <?php } ?>
+                                            <input type="hidden" id="cd_conta">
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Fechar</button>
+                                    <?php if($_SESSION['usuarioLogin'] == $row_conta_contabil['USUARIO']){ ?>
+                                    <button type="button" class="btn btn-primary" onclick="cad_just()"><i class="fas fa-save"></i> Salvar</button>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </tr>
                 

@@ -44,86 +44,184 @@
         include 'js/mensagens.php';
     ?>
 
-    <form action="resultados_usu.php" method="POST">
+<form action="resultados_usu.php" method="POST">
 
-        <!--FILTROS-->
-        <div class="row">
+<!--FILTROS-->
+<div class="row">
 
+    <div class="col-2" style="text-align: left; background-color: #f9f9f9 !important;">
+        <?php include 'filtros/indicador.php'; ?>    
+    </div>
+    
+    <div class="col-2" id="div_filtro_setor" style="text-align: left; background-color: #f9f9f9 !important;">
+        <?php include 'filtros/setor.php'; ?>
+    </div>
+
+    <div class="col-2" id="div_filtro_ano" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+        <?php include 'filtros/ano.php'; ?> 
+    </div> 
+
+    <div class="col-2" id="div_reduzido" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+  
+        Reduzido:
+        <input type="number" name="jv_reduzido" id="jv_reduzido" value="<?php echo $reduzido ?>" class="form-control">
+    </div>
+
+    <div class="col-3" id="div_filtro_periodo" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+        <?php include 'filtros/periodo.php'; ?>  
+    </div> 
+    
+    <div class="col-2" id="div_filtro_mes" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+        <?php include 'filtros/mes.php'; ?>  
+    </div> 
+
+    <div class="col-3" id="div_filtro_visao" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+        <?php include 'filtros/visao.php'; ?>  
+    </div>
+
+
+    <div class="col-3" id="div_filtro_button" style="text-align: left; background-color: #f9f9f9 !important; ">
+         <br>
+        <!-- BOTAO PESQUISAR -->
+        <button type="submit" class="btn btn-primary" >
+            <i class="fas fa-search"></i> Pesquisar
+        </button>           
+    </div>  
+
+</div>
+
+</form>
+
+
+    <!------------>
+    <!-- DESVIO -->
+    <!------------>
+    
+    <?php 
+        //echo $var_indicador;
+        if($var_indicador == 'Desvio'){
             
-            
-            <div class="col-2" id="div_filtro_setor" style="text-align: left; background-color: #f9f9f9 !important;">
-                <?php include 'filtros/setor.php'; ?>
-            </div>
+            include 'resultados_usu/desvio/estrutura_desvio.php';
 
-            
-            <div class="col-3" id="div_filtro_periodo" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
-                <?php if(strlen($var_periodo_filtro) < 1){ 
-                
-                        echo "Período:";
-                        echo "<input type='month' class='form-control' name='frm_cad_periodo' id='jv_filtro_periodo'  required>";
-                    }else{
-                        
-                        echo "Período:";
-                        echo "<input type='month' class='form-control' name='frm_cad_periodo' id='jv_filtro_periodo' value='". $var_periodo_filtro."' required >";
-                    } ?>  
-                    </div> 
-            
-            <div class="col-2" id="div_reduzido" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
-          
-                Reduzido:
-                <input type="number" name="jv_reduzido" id="jv_reduzido" value="<?php echo $reduzido ?>" class="form-control">
-            </div>
-            
-
-
-            <div class="col-3" id="div_filtro_button" style="text-align: left; background-color: #f9f9f9 !important; ">
-                 <br>
-                <!-- BOTAO PESQUISAR -->
-                <button type="submit" class="btn btn-primary" >
-                    <i class="fas fa-search"></i> Pesquisar
-                </button>           
-            </div>  
-
-        </div>
-
-    </form>
+        }
+    ?>
 
     <!-------------->
     <!-- GERENCIA -->
     <!-------------->
     
     <?php 
+        //echo $var_indicador;
+        if($var_indicador == 'Gerencia'){
             
-        include 'resultados_usu/estrutura_gerencia_usu.php';
-        
+            include 'resultados_usu/gerencia/estrutura_gerencia.php';
+        }
+    ?>
+
+    <!--------------->
+    <!-- ACUMULADO -->
+    <!--------------->
+    
+    <?php 
+        //echo $var_indicador;
+        if($var_indicador == 'Acumulado'){
+            include 'resultados_usu/acumulado/estrutura_acumulado.php';
+        }
     ?>
 
 
 <script>
-
-
+    var var_div_filtro_ano = document.getElementById("div_filtro_ano");
     var var_div_filtro_periodo = document.getElementById("div_filtro_periodo");
+    var var_div_filtro_mes = document.getElementById("div_filtro_mes");
     var var_div_filtro_setor = document.getElementById("div_filtro_setor");
+    var var_div_filtro_visao = document.getElementById("div_filtro_visao"); 
     var var_div_filtro_button = document.getElementById("div_filtro_button"); 
     var var_div_filtro_reduzido = document.getElementById("div_reduzido"); 
 
+    var var_jv_filtro_visao = document.getElementById("jv_filtro_visao");
     var var_jv_filtro_setor = document.getElementById("jv_filtro_setor");
     var var_jv_filtro_periodo = document.getElementById("jv_filtro_periodo");
+    var var_jv_filtro_mes = document.getElementById("jv_filtro_mes");
+    var var_jv_filtro_ano = document.getElementById("jv_filtro_ano");  
     var var_jv_filtro_reduzido = document.getElementById("jv_reduzido");   
+    
+    function filtroIndicador() {
 
-    $(document).ready(function() {
-        console.log('sai do console curioso')
+        var select = document.getElementById('indicador_filtro');
+        var option = select.options[select.selectedIndex].value;
+        //alert(option);
 
-        var_div_filtro_button.style.display = 'inline';
-        var_div_filtro_setor.style.display = 'inline';
-        var_div_filtro_periodo.style.display = 'inline';
-        var_div_filtro_reduzido.style.display = 'inline';
+        if (option == '') {
+            //alert('e');
+            var_div_filtro_ano.style.display = 'none';
+            var_div_filtro_mes.style.display = 'none';
+            var_div_filtro_setor.style.display = 'none';
+            var_div_filtro_visao.style.display = 'none';
+            var_div_filtro_periodo.style.display = 'none';
+            var_div_filtro_button.style.display = 'none';
 
-        var_jv_filtro_setor.value = 'Todos'
+            var_jv_filtro_ano.required = false;
+            var_jv_filtro_visao.required = false;
+            var_jv_filtro_mes.required = false;
+            var_jv_filtro_setor.required = false;
+            var_jv_filtro_periodo.required = false;
 
-        var_jv_filtro_setor.required = true;
-        var_jv_filtro_periodo.required = true;
-    });
+        } 
+
+        if (option == 'Desvio') {
+            //alert('a');
+            var_div_filtro_button.style.display = 'inline';
+            var_div_filtro_ano.style.display = 'inline';
+            var_div_filtro_visao.style.display = 'inline';
+            var_div_filtro_mes.style.display = 'none';
+            var_div_filtro_setor.style.display = 'inline';
+            var_div_filtro_periodo.style.display = 'none';
+
+            var_jv_filtro_ano.required = true;
+            var_jv_filtro_visao.required = true;
+            var_jv_filtro_mes.required = false;
+            var_jv_filtro_setor.required = true;
+            var_jv_filtro_periodo.required = false;
+        }  
+
+        if (option == 'Gerencia' ) {
+            //alert('b');
+
+            var_div_filtro_button.style.display = 'inline';
+            var_div_filtro_setor.style.display = 'inline';
+            var_div_filtro_periodo.style.display = 'inline';
+            var_div_filtro_mes.style.display = 'none';
+            var_div_filtro_ano.style.display = 'none';
+            var_div_filtro_visao.style.display = 'none';
+            var_div_filtro_reduzido.style.display = 'inline';
+
+            var_jv_filtro_ano.required = false;
+            var_jv_filtro_visao.required = false;
+            var_jv_filtro_mes.required = false;
+            var_jv_filtro_setor.required = true;
+            var_jv_filtro_periodo.required = true;
+
+        } 
+
+        if (option == 'Acumulado' ) {
+            //alert('c');
+            var_div_filtro_button.style.display = 'inline';
+            var_div_filtro_ano.style.display = 'inline';
+            var_div_filtro_mes.style.display = 'none';
+            var_div_filtro_setor.style.display = 'none';
+            var_div_filtro_visao.style.display = 'none';
+            var_div_filtro_periodo.style.display = 'none';
+
+            var_jv_filtro_ano.required = true;
+            var_jv_filtro_visao.required = false;
+            var_jv_filtro_mes.required = false;
+            var_jv_filtro_setor.required = false;
+            var_jv_filtro_periodo.required = false;
+
+        }
+    };
+    $(document).ready(function() { filtroIndicador(); });
 
 </script>
 
