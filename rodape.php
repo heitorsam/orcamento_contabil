@@ -17,14 +17,17 @@
                    Atendemos todas as idades com nosso corpo de médicos e especialistas. Nossas instalações estão prontas para lhe atender e proporcionar o máximo de conforto.</p>
                 <p>Projeto desenvolvido pela equipe de Tecnologia.</p>
             </div>
+            <?php if(@$_SESSION['usuarioLogin'] != ''){ ?>
         	<div class="col-md-4 footer-nav animated fadeInUp">
+            
             	<h4>Menu</h4>
             	<div class="col-md-10">
                 
+                    
                     <ul class="pages">
                         <li><a href="home.php">Home</a></li>                           
                     </ul>
-
+                
                 </div>
             	<div class="col-md-10">
                     <ul class="list">
@@ -32,6 +35,7 @@
                     </ul>
                 </div>
             </div>
+            <?php } ?>
         	<div class="col-md-3 footer-social animated fadeInDown">
             	<h4>Outros Projetos</h4>
             	<ul>
@@ -72,4 +76,4 @@
     window.scrollTo(0,1);
  }
 
-<script>
+</script>
