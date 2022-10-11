@@ -3,7 +3,7 @@
 <div class="table-responsive col-md-12" style="text-align: center;">
     <table class="table" style="padding: 0px !important; border-spacing: 0px !important;" cellspacing="0" cellpadding="0"> 
 
-        <td style="width: margin: 0px !important; padding: 0px !important;">                
+        <td style="margin: 0px !important; padding: 0px !important;">                
             <div class="pivot_tr_titulo"> RECEITA </div>          
             <div class="pivot_tr_conteudo">ORÇADO</div>
             <div class="pivot_tr_conteudo">REALIZADO</div>
@@ -38,7 +38,7 @@
         
         <?php while($row_acumulado = @oci_fetch_array($result_resultado_acumulado)){ ?> 
 
-            <td style="width: margin: 0px !important; padding: 0px !important;">  
+            <td style="margin: 0px !important; padding: 0px !important;">  
 
                 <?php
 
