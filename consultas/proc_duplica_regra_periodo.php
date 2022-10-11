@@ -26,9 +26,11 @@
     //DUPLICA REGRA PERIODO//
     /////////////////////////
 
+    //PASSAR VAR_SETOR
+
     echo $cad_duplica_periodo = "BEGIN 
 
-                                    orcamento_contabil.PRC_DUPLICA_REGRAS_MES('$var_ref','$var_new','$var_cd_usuario');
+                                    orcamento_contabil.PRC_DUPLICA_REGRAS_MES_SETOR('$var_ref','$var_new','$var_cd_usuario');
                                 
                                 END;";
     
