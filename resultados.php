@@ -48,18 +48,15 @@
     <form action="resultados.php" method="POST">
 
         <!--FILTROS-->
-        <div class="row">
-
-            <div class="col-2" style="text-align: left; background-color: #f9f9f9 !important;">
-                <?php include 'filtros/indicador.php'; ?>    
-            </div>
-            
-            <div class="col-2" id="div_filtro_setor" style="text-align: left; background-color: #f9f9f9 !important;">
-                <?php include 'filtros/setor.php'; ?>
+        <div class="rowhp'; ?>
             </div>
 
             <div class="col-2" id="div_filtro_ano" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
                 <?php include 'filtros/ano.php'; ?> 
+            </div> 
+
+            <div class="col-3" id="div_filtro_periodo" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
+                <?php include 'filtros/periodo.php'; ?>  
             </div> 
 
             <div class="col-2" id="div_reduzido" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
@@ -67,18 +64,13 @@
                 Reduzido:
                 <input type="number" name="jv_reduzido" id="jv_reduzido" value="<?php echo $reduzido ?>" class="form-control">
             </div>
-
-            <div class="col-3" id="div_filtro_periodo" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
-                <?php include 'filtros/periodo.php'; ?>  
-            </div> 
             
             <div class="col-2" id="div_filtro_mes" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
                 <?php include 'filtros/mes.php'; ?>  
             </div> 
 
             <div class="col-3" id="div_filtro_visao" style="text-align: left; background-color: #f9f9f9 !important; display: none;">
-                <?php include 'filtros/visao.php'; ?>  
-            </div>
+                <?php include 'filtros/visao.p
 
 
             <div class="col-3" id="div_filtro_button" style="text-align: left; background-color: #f9f9f9 !important; ">
