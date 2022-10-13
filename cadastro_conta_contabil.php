@@ -87,6 +87,8 @@
                 ?>
                 <?php 
                     include 'modals/conta_contabil/modal_pendencias.php';
+
+                   
                 ?>
             </div>
         </div>
@@ -385,6 +387,8 @@
         $result_conta_contabil = oci_parse($conn_ora, $lista_conta_contabil);
 
         @oci_execute($result_conta_contabil);
+
+        include 'modals/conta_contabil/modal_anexos_conta_contabil.php';
   
     ?>
 
@@ -405,7 +409,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>       Variação       </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>   %Variação   </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>  Editar Realizado  </span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>    Editar Conta    </span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>    Opções    </span></th>
 
         </tr></thead>            
 
@@ -602,6 +606,7 @@
                             href='consultas/conta_contabil/sql_exclui_realizado.php?cd_conta_contabil=<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>'>
                                 <i class='fas fa-trash'></i>
                             </a>
+                            
 
                         <?php } else { ?> 
 
@@ -618,13 +623,14 @@
                         
                         <!--MODAL EDITAR CONTA-->
                         <?php //include 'modals/conta_contabil/modal_edit_conta_contabil.php'?>
+                        
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#anoxos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
 
                         <!-- EXCLUIR REALIZADO -->
                         <a class='btn btn-danger btn-xs' onclick="return confirm('Tem certeza que deseja excluir o realizado?')"
                             href='consultas/conta_contabil/sql_exclui_conta_contabil.php?cd_conta_contabil=<?php echo @$row_conta_contabil['CD_CONTA_CONTABIL']; ?>'>
                                 <i class='fas fa-trash'></i>
                         </a>
-
                     </td>
 
                 </tr>
@@ -643,9 +649,21 @@
 
 <?php
 
+    
+
     //JAVASCRIPT EDITAR CAMPOS
     include 'funcoes/js_editar_campos.php';
 
     //RODAPE
     include 'rodape.php';
 ?>
+
+<script>
+
+                function ajax_modal_anexos(cd_conta_contabil){
+                    $('#div_anexos').load('funcoes/ajax_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                }
+
+
+
+</script>
