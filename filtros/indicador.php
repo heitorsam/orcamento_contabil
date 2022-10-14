@@ -18,5 +18,6 @@ Indicador: </br>
     <?php if($var_indicador <> 'Desvio') { echo "<option value='Desvio'> Desvio </option>"; } ?>
     <?php if($var_indicador <> 'Gerencia') { echo "<option value='Gerencia'> Gerencia </option>"; } ?>
     <?php if($var_indicador <> 'Acumulado') { echo "<option value='Acumulado'> Acumulado </option>"; } ?>
+    <?php if($var_indicador <> 'Ranking') { echo "<option value='Ranking'> Ranking </option>"; } ?>
 
 </select>    

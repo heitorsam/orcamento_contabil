@@ -129,6 +129,13 @@
         }
     ?>
 
+    <?php 
+        //echo $var_indicador;
+        if($var_indicador == 'Ranking'){
+            include 'resultados/ranking/estrutura_ranking.php';
+        }
+    ?>
+
 <script>
     var var_div_filtro_ano = document.getElementById("div_filtro_ano");
     var var_div_filtro_periodo = document.getElementById("div_filtro_periodo");
@@ -217,6 +224,23 @@
             var_jv_filtro_mes.required = false;
             var_jv_filtro_setor.required = false;
             var_jv_filtro_periodo.required = false;
+
+        }
+
+        if (option == 'Ranking' ) {
+            //alert('d');
+            var_div_filtro_button.style.display = 'inline';
+            var_div_filtro_ano.style.display = 'none';
+            var_div_filtro_mes.style.display = 'none';
+            var_div_filtro_setor.style.display = 'none';
+            var_div_filtro_visao.style.display = 'inline';
+            var_div_filtro_periodo.style.display = 'inline';
+
+            var_jv_filtro_ano.required = false;
+            var_jv_filtro_visao.required = true;
+            var_jv_filtro_mes.required = false;
+            var_jv_filtro_setor.required = false;
+            var_jv_filtro_periodo.required = true;
 
         }
     };
