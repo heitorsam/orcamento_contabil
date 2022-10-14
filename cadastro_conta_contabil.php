@@ -409,7 +409,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>       Variação       </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>   %Variação   </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>  Editar Realizado  </span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>    Opções    </span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>        Opções        </span></th>
 
         </tr></thead>            
 
@@ -624,7 +624,7 @@
                         <!--MODAL EDITAR CONTA-->
                         <?php //include 'modals/conta_contabil/modal_edit_conta_contabil.php'?>
                         
-                        <a class="btn btn-primary" data-toggle="modal" data-target="#anoxos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
 
                         <!-- EXCLUIR REALIZADO -->
                         <a class='btn btn-danger btn-xs' onclick="return confirm('Tem certeza que deseja excluir o realizado?')"
@@ -661,7 +661,29 @@
 <script>
 
                 function ajax_modal_anexos(cd_conta_contabil){
-                    $('#div_anexos').load('funcoes/ajax_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                    $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                    $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                }
+
+                function ajax_apagar_anexo(cd_conta_contabil, cd_anexo){
+                    $resultado = confirm('Certeza que deseja apagar esse anexo?')
+                    if($resultado == true){
+                        $.ajax({
+                            url: "funcoes/ajax_apagar_anexo.php",
+                            type: "POST",
+                            data: {
+                                cd_anexo:cd_anexo		
+                                },
+                            cache: false,
+                            success: function(dataResult){                    
+                            
+                                $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                                $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)        
+    
+                            }
+                        });
+                    }
+                    
                 }
 
 

@@ -9,8 +9,8 @@ include_once("../conexao.php");
 @$login_usuario = $_SESSION['usuarioLogin'];
 
 @$cd_documento_conta_contabil = $_POST['cd_documento_conta_contabil'];
-@$ds_doc = $_POST['ds_doc'];
-
+echo @$ds_doc = $_POST['ds_doc'];
+print_r($_FILES);
 
 $currentDir = getcwd();
     $uploadDirectory = "uploads/";
@@ -30,8 +30,8 @@ $currentDir = getcwd();
       $fileExtension = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
       $extensao_arquivo = strrchr( $fileName, '.' );
 
-      $nome_arquivo_personalizado = substr($ds_doc, 0, 10) . $extensao_arquivo;
-      echo $uploadPath = $currentDir . $uploadDirectory . basename($fileName);
+      echo $nome_arquivo_personalizado = $_FILES['fileAjax']['name'];
+      $uploadPath = $currentDir . $uploadDirectory . basename($fileName);
 
       //DECLARANDO VARIAVEIS DO ARQUIVO PARA IMPORTACAO PARA O BANCO
       $image = file_get_contents($_FILES['fileAjax']['tmp_name']);

@@ -165,7 +165,7 @@
                     <!--MODAL OPÇOES-->
                     <td class="align-middle" style="text-align: center !important;">
                         <?php include 'modals/grupo_orcado/modal_edit_grupo_orcado.php' ?>
-                        <?php/* include 'model_excluir_setor.php'*/?>
+                        <?php /* include 'model_excluir_setor.php'*/?>
                     </td>
                 </tr>
                 
