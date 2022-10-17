@@ -86,6 +86,8 @@
           var update_final = global_update_inicial +
                             vl_campo + 
                             global_update_final;
+
+           console.log(update_final);
         }
         $.ajax({
             url: "funcoes/ajax_editar_campos.php",
