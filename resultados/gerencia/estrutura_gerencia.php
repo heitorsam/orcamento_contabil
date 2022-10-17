@@ -335,6 +335,13 @@
         $result_conta_contabil = oci_parse($conn_ora, $lista_conta_contabil);
 
         @oci_execute($result_conta_contabil);
+
+        if(@$var_setor != '' && @$var_setor != 'Todos'){
+            $consulta_usu_setor = "SELECT CD_USUARIO FROM orcamento_contabil.USUARIOS_SETOR WHERE CD_SETOR = $var_setor";
+            $resultado_usu_setor  = oci_parse($conn_ora, $consulta_usu_setor);
+            oci_execute($resultado_usu_setor);
+            $row_usu_setor = oci_fetch_array($resultado_usu_setor);
+        }
   
     ?>
 
@@ -540,7 +547,7 @@
                     <td class='align-middle' style="text-align: center;background-color:<?php echo $color ?>!important; color:<?php echo $row_conta_contabil['COR_VARIACAO'] ?>!important;" >
                         <?php 
                             if(!isset($row_conta_contabil['JUSTIFICA_1'])){
-                                if($_SESSION['usuarioLogin'] == $row_conta_contabil['USUARIO']){
+                                if(@in_array($_SESSION['usuarioLogin'], @$row_usu_setor)){
                                     $cor_just = '#E05757';
                                     $liberado = '';
                                 }else{

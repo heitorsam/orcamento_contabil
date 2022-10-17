@@ -1,6 +1,6 @@
 <?php 
 
-    include '../conexao.php';
+    include '../../conexao.php';
 
     $cd_anexo = $_POST['cd_anexo'];
 

@@ -1,6 +1,6 @@
 <?php 
 
-    include '../conexao.php';
+    include '../../conexao.php';
 
     $cd_conta_contabil = $_GET['cd_conta_contabil'];
 

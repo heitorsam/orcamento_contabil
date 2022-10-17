@@ -661,15 +661,15 @@
 <script>
 
                 function ajax_modal_anexos(cd_conta_contabil){
-                    $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
-                    $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                    $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                    $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
                 }
 
                 function ajax_apagar_anexo(cd_conta_contabil, cd_anexo){
                     $resultado = confirm('Certeza que deseja apagar esse anexo?')
                     if($resultado == true){
                         $.ajax({
-                            url: "funcoes/ajax_apagar_anexo.php",
+                            url: "funcoes/conta_contabil/ajax_apagar_anexo.php",
                             type: "POST",
                             data: {
                                 cd_anexo:cd_anexo		
@@ -677,8 +677,8 @@
                             cache: false,
                             success: function(dataResult){                    
                             
-                                $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
-                                $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)        
+                                $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                                $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)        
     
                             }
                         });

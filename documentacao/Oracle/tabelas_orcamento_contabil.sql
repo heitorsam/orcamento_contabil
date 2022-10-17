@@ -117,10 +117,6 @@ CREATE TABLE orcamento_contabil.ANEXOS(
 
 CD_ANEXO INT NOT NULL,
 CD_CONTA_CONTABIL   INT NOT NULL,
-TP_DOCUMENTO            VARCHAR2(2) NOT NULL , -- DS DOCUMENTO SAME
-                                                 -- FR FOTO REQUERENTE | DC DOCUMENTO COM ASSINATURA | AO ATESTADO OBITO
-                                                 -- DJ DOCUMENTO JUDICIAL | AE ASSINATURA EMAIL | CC CERTIDAO CASAMENTO
-                                                 -- PL PROCURACAO LEGAL REPRESENTANTE | OT OUTROS
   LO_ARQUIVO_DOCUMENTO    BLOB NOT NULL,
   DS_NOME_ARQUIVO         VARCHAR2(40),
   TP_EXTENSAO             VARCHAR2(4),
@@ -136,3 +132,18 @@ START WITH 1
 INCREMENT BY   1
 NOCACHE
 NOCYCLE;
+
+DROP TABLE orcamento_contabil.usuarios_setor;
+CREATE TABLE orcamento_contabil.usuarios_setor(
+
+CD_SETOR                INT NOT NULL,
+CD_USUARIO              VARCHAR(20) NOT NULL,
+CD_USUARIO_CADASTRO     VARCHAR(20) NOT NULL,
+HR_CADASTRO             TIMESTAMP NOT NULL,
+
+constraint PK_CD_USUARIO primary key (CD_USUARIO),
+constraint FK_CD_USUARIO foreign key (CD_USUARIO) references DBASGU.usuarios (CD_USUARIO),
+constraint FK_CD_SETOR foreign key (CD_SETOR) references setor (CD_SETOR)
+
+
+);

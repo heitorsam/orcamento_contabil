@@ -3,7 +3,7 @@ session_start();
 //require_once('acesso_restrito.php');?>
 
 <?php
-include_once("../conexao.php");
+include_once("../../conexao.php");
 
 //INFORMACOES DO USUARIO
 @$login_usuario = $_SESSION['usuarioLogin'];

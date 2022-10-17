@@ -64,15 +64,15 @@
         // Set up the request
         var xhr = new XMLHttpRequest();
         // Open the connection
-        xhr.open('POST', 'funcoes/ajax_enviar_anexo_conta_contabil.php', true);
+        xhr.open('POST', 'funcoes/conta_contabil/ajax_enviar_anexo_conta_contabil.php', true);
 
         // Set up a handler for when the task for the request is complete
         xhr.onload = function () {
             if (xhr.status == 200) {
                 statusP.innerHTML = 'Upload realizado com sucesso!';
                 //window.setTimeout(function(){location.reload()},500);
-                $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
-                $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
+                $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
+                $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
                 //AnexoFotoTabela();
                 //CHAMANDO O NOVO SELECT TIPO DOC
                 //SelectTipoDoc();
@@ -83,8 +83,8 @@
                 //CHAMANDO O NOVO SELECT TIPO DOC
                 //SelectTipoDoc();
             }
-            $('#div_carrosel').load('funcoes/ajax_galeria_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
-            $('#div_anexos').load('funcoes/ajax_modal_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
+            $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
+            $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
         };
 
         // Send the data.

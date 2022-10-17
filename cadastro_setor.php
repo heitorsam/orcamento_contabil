@@ -61,7 +61,10 @@
         $result_setor = oci_parse($conn_ora, $lista_setor);
 
         @oci_execute($result_setor);
+
+        include 'modals/setor/modal_usuarios_setor.php';
     ?>
+
 
     <!--TABELA DE RESULTADOS -->
     <div class="table-responsive col-md-12">
@@ -72,7 +75,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>Nome</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>Gerente</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>Ativo</span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>Usuario</span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>Usuarios</span></th>
 
         </tr></thead>            
 
@@ -105,9 +108,9 @@
                                 "' onclick=\"return confirm('Tem certeza que deseja ativar esse registro?');\">" . 
                                 "<i class='fa fa-toggle-off' aria-hidden='true'></i>" . "</a>" . "</td>"; 
                             };?>
-                    <td id="CD_USUARIO<?php echo @$row_setor['CD_SETOR']; ?>"
-                    ondblclick="fnc_editar_campo('orcamento_contabil.SETOR', 'CD_USUARIO', '<?php echo @$row_setor['CD_USUARIO']; ?>', 'CD_SETOR', '<?php echo @$row_setor['CD_SETOR']; ?>', '')"
-                    class='align-middle' style='text-align: center;'><?php echo @$row_setor['CD_USUARIO']; ?></td>
+                    <td class='align-middle' style='text-align: center;'>
+                        <a onclick="ajax_modal_usuarios('<?php echo $row_setor['CD_SETOR'] ?>')" class="btn btn-primary" data-toggle="modal" data-target="#cad_usuarios"><i class="fas fa-users"></i></a>
+                    </td>
 
                 </tr>
                 <?php 
@@ -126,3 +129,50 @@
     include 'rodape.php';
 ?>
 
+<script>
+
+    function ajax_modal_usuarios(cd_setor){
+        $('#div_usuarios').load('funcoes/setor/ajax_tabela_usuarios.php?cd_setor='+cd_setor)
+        $('#div_input').load('funcoes/setor/ajax_input_usuarios.php?cd_setor='+cd_setor)
+    }
+
+    function ajax_cad_usuario(cd_setor){
+        usuario = document.getElementById('inpt_usuario')
+        if(usuario.value == ''){
+            usuario.focus()
+        }else{
+            $.ajax({
+                url: "funcoes/setor/ajax_cad_usuario.php",
+                type: "POST",
+                data: {
+                    cd_setor: cd_setor,
+                    cd_usuario: usuario.value		
+                    },
+                cache: false,
+                success: function(dataResult){                    
+                    usuario.value = ''
+                    $('#div_usuarios').load('funcoes/setor/ajax_tabela_usuarios.php?cd_setor='+cd_setor)    
+
+                }
+            });
+        }
+    }
+
+    function ajax_apagar_usuario(cd_usuario, cd_setor){
+        $.ajax({
+            url: "funcoes/setor/ajax_apagar_usuario.php",
+            type: "POST",
+            data: {
+                cd_setor: cd_setor,
+                cd_usuario: cd_usuario		
+                },
+            cache: false,
+            success: function(dataResult){                    
+
+                $('#div_usuarios').load('funcoes/setor/ajax_tabela_usuarios.php?cd_setor='+cd_setor)    
+
+            }
+        });
+    }
+
+</script>
