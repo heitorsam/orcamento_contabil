@@ -28,7 +28,7 @@
         <thead><tr>
             <!--COLUNAS-->
             <th class="align-middle" style="text-align: center !important;"><span>Setor</span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>Usuario</span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>Usuário</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>Opções</span></th>
 
         </tr></thead>            

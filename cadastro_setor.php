@@ -75,7 +75,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>Nome</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>Gerente</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>Ativo</span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>Usuarios</span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>Usuários</span></th>
 
         </tr></thead>            
 
