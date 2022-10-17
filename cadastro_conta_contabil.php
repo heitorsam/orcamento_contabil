@@ -666,7 +666,7 @@
                 }
 
                 function ajax_apagar_anexo(cd_conta_contabil, cd_anexo){
-                    $resultado = confirm('Certeza que deseja apagar esse anexo?')
+                    $resultado = confirm('Realmente deseja apagar esse anexo?')
                     if($resultado == true){
                         $.ajax({
                             url: "funcoes/conta_contabil/ajax_apagar_anexo.php",

@@ -313,10 +313,15 @@
                             ELSE 'grey'
 
                         END COR_VARIACAO , 
-                        st.cd_usuario AS USUARIO
-                        FROM orcamento_contabil.VW_RESULTADOS_CONSOLIDADOS vrc
-                        LEFT JOIN orcamento_contabil.setor st
-                                                ON vrc.CD_SETOR = st.cd_setor                               
+                        st.cd_usuario AS USUARIO,
+                        just.ds_justificativa_1 AS JUSTIFICA_1,
+                        just.ds_justificativa_2 AS JUSTIFICA_2,
+                        just.ds_justificativa_3 AS JUSTIFICA_3
+                    FROM orcamento_contabil.VW_RESULTADOS_CONSOLIDADOS vrc
+                    LEFT JOIN orcamento_contabil.setor st
+                        ON vrc.CD_SETOR = st.cd_setor
+                    LEFT JOIN orcamento_contabil.justificativa_contabil_clob just
+                    ON just.cd_conta_contabil = vrc.CD_CONTA_CONTABIL                                
                                  
                                  WHERE vrc.PERIODO = '$var_periodo'";
 
@@ -342,7 +347,8 @@
             oci_execute($resultado_usu_setor);
             $row_usu_setor = oci_fetch_array($resultado_usu_setor);
         }
-  
+
+        include 'modals/conta_contabil/modal_anexos_conta_contabil.php';
     ?>
 
     <!--TABELA DE RESULTADOS -->
@@ -361,7 +367,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>Realizado</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>       Variação       </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>   %Variação   </span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>   Justificativa   </span></th>
+            <th class="align-middle" style="text-align: center !important;"><span>         Opções         </span></th>
 
 
         </tr></thead>            
@@ -627,6 +633,14 @@
                                     });
                                 }
                             </script>
+
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
+
+                        <script>
+                            function ajax_modal_anexos(cd_conta_contabil){
+                                $('#div_carrosel').load('resultados/gerencia/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                            }
+                        </script>
                     
                     </td>  
                     <div class="modal fade" id="modaljustificativa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -641,7 +655,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <?php if($_SESSION['usuarioLogin'] == $row_conta_contabil['USUARIO']){ ?>
+                                            <?php if(@in_array(@$_SESSION['usuarioLogin'], @$row_usu_setor)){ ?>
                                                 Contextualização:
                                                 <textarea class="form-control" id="justficativa_1" rows="5" maxlength="3900"></textarea>
                                                 <div class="div_br"></div>
@@ -668,7 +682,7 @@
                                 <div class="modal-footer">
                                     
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Fechar</button>
-                                    <?php if($_SESSION['usuarioLogin'] == $row_conta_contabil['USUARIO']){ ?>
+                                    <?php if(@in_array(@$_SESSION['usuarioLogin'], @$row_usu_setor)){ ?>
                                     <button type="button" class="btn btn-primary" onclick="cad_just()"><i class="fas fa-save"></i> Salvar</button>
                                     <?php } ?>
                                 </div>

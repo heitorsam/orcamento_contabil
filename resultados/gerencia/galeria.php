@@ -63,10 +63,6 @@
                                                 <i class="fas fa-angle-left"></i> Anterior</i>
                                             <a>
 
-                                            <a style="text-decoration: none;" class="botoes_apagar_modal" onclick="ajax_apagar_anexo('<?php echo $cd_conta_contabil ?>','<?php echo $array_cd_anexo[$i] ?>')" class="botoes_modal">
-                                                <i class='fas fa-trash'></i>
-                                            </a>
-
                                             <a style="text-decoration: none;" class="botoes_modal fechar<?php echo $i;?>">
                                                 <i class="far fa-times-circle"></i>
                                             </a>

@@ -36,7 +36,7 @@ $currentDir = getcwd();
       //DECLARANDO VARIAVEIS DO ARQUIVO PARA IMPORTACAO PARA O BANCO
       $image = file_get_contents($_FILES['fileAjax']['tmp_name']);
 
-        /*if (isset($fileName)) {
+        if (isset($fileName)) {
             if (! in_array($fileExtension,$fileExtensions)) {
                 $errors[] = "São suportadas somente imagens JPEG, JPG and PNG e arquivos PDF.";
             }
@@ -52,12 +52,12 @@ $currentDir = getcwd();
                     echo $error . "Ocorreu o seguinte erro: " . "\n";
                 }
             }
-        }*/
+        }
     } 
 
 
 
-    
+if(empty($errors)){
    $consulta_insert_AD = "INSERT INTO orcamento_contabil.ANEXOS
                                     (CD_ANEXO,
                                     CD_CONTA_CONTABIL,
@@ -97,3 +97,6 @@ $currentDir = getcwd();
   
    
    echo '</br>';
+
+   
+}

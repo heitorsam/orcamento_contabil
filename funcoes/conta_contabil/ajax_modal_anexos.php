@@ -83,8 +83,7 @@
                 //CHAMANDO O NOVO SELECT TIPO DOC
                 //SelectTipoDoc();
             }
-            $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
-            $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_documento_conta_contabil)
+            
         };
 
         // Send the data.
