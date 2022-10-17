@@ -78,6 +78,7 @@ session_start();
                             <a class="dropdown-item" style="background-color: #f3f3f3; " href="javascript:void(0)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Cadastros</a>  
                             <a class="dropdown-item" href="cadastro_setor.php"><i class="fa fa-building" aria-hidden="true"></i> Setor</a>   
                             <a class="dropdown-item" href="cadastro_grupo_orcado.php"><i class="fa fa-users" aria-hidden="true"></i> Grupo Orçado</a>   
+                            <a class="dropdown-item" href="cadastro_result_prev.php"><i class="fa fa-line-chart" aria-hidden="true"></i> Resultado Previsto</a> 
                             <a class="dropdown-item" href="cadastro_conta_contabil.php"><i class="fa fa-archive" aria-hidden="true"></i> Conta Contábil</a>   
                             <a class="dropdown-item" href="duplicar_periodo.php"><i class="fas fa-copy" aria-hidden="true"></i> Duplicar Período</a>  
                         <?php } ?>

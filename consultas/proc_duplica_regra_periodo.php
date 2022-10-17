@@ -15,6 +15,9 @@
 
     echo $var_new = $_POST["frm_mes_new"];
     echo '</br>';
+
+    echo $var_setor = $_POST["frm_cd_setor"];
+    echo '</br>';
     
     //RECEBENDO POST
     echo '</br>';
@@ -30,7 +33,7 @@
 
     echo $cad_duplica_periodo = "BEGIN 
 
-                                    orcamento_contabil.PRC_DUPLICA_REGRAS_MES_SETOR('$var_ref','$var_new','$var_cd_usuario');
+                                    orcamento_contabil.PRC_DUPLICA_REGRAS_MES_SETOR('$var_ref','$var_new','$var_cd_usuario',$var_setor);
                                 
                                 END;";
     

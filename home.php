@@ -29,6 +29,10 @@
                 <a href="cadastro_grupo_orcado.php" class="botao_home" type="submit"><i class="fa fa-users" aria-hidden="true"></i> Grupo Orçado</a></td></tr>
                 
                 <span class="espaco_pequeno"></span>
+
+                <a href="cadastro_result_prev.php" class="botao_home" type="submit"><i class="fa fa-line-chart" aria-hidden="true"></i> Resultado Previsto</a></td></tr>
+                
+                <span class="espaco_pequeno"></span>
                 
                 <a href="cadastro_conta_contabil.php" class="botao_home" type="submit"><i class="fa fa-archive" aria-hidden="true"></i> Conta Contábil</a></td></tr>
 

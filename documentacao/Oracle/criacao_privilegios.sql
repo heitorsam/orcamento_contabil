@@ -15,3 +15,6 @@ GRANT SELECT ON DBASGU.PAPEL TO orcamento_contabil;
 GRANT SELECT ON dbamv.PLANO_CONTAS TO orcamento_contabil;
 
 GRANT SELECT ON dbamv.MVW_CONTA_CONTABIL_REALIZADO TO orcamento_contabil;
+
+GRANT INSERT ON portal_projetos.ACESSO TO orcamento_contabil;
+GRANT SELECT ON portal_projetos.SEQ_CD_ACESSO TO orcamento_contabil;

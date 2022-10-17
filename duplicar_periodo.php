@@ -58,6 +58,37 @@
                 <input type="month" class="form-control" name="frm_mes_new" placeholder="Digite o período" required>
             
             </div>
+
+            <div class="col-4" style="text-align: left; background-color: #f9f9f9 !important;">
+
+                Setor:
+                <select class="form-control" name="frm_cd_setor" required>
+
+                    <option value=''>Selecione</option>
+
+                    <?php
+
+                        $cons_setor = "SELECT st.CD_SETOR, st.DS_SETOR
+                                       FROM orcamento_contabil.SETOR st
+                                       ORDER BY st.DS_SETOR ASC";
+
+                        $res_cons_setor = oci_parse($conn_ora, $cons_setor);
+                        
+                        oci_execute($res_cons_setor);
+
+
+                        while($row_st = oci_fetch_array($res_cons_setor)){
+
+                            echo "<option value='" . $row_st['CD_SETOR'] . "'>" . $row_st['DS_SETOR'] . "</option>";
+
+                        }
+
+                    ?>                   
+
+
+                </select>
+
+            </div>
             
         </div>
 

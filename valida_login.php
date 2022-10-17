@@ -53,11 +53,28 @@
 		if(isset($resultado)){
 			
 			if($resultado[0] == 'Login efetuado com sucesso') {
-				$_SESSION['usuarioLogin'] = $usuario;
-				$_SESSION['usuarioNome'] = $resultado[1];
-				$_SESSION['SN_CONTABILIDADE'] = $resultado[2];
-				$_SESSION['SN_VISUALIZACAO'] = $resultado[3];
-				header("Location: $pag_apos");
+
+				$cons_acesso_login="INSERT INTO portal_projetos.ACESSO
+				SELECT portal_projetos.SEQ_CD_ACESSO.NEXTVAL AS CD_ACESSO,
+				'ORÇAMENTO CONTÁBIL' AS DS_PROJETO,
+				'$usuario' AS CD_USUARIO_ACESSO,
+				SYSDATE AS HR_ACESSO
+				FROM DUAL";
+
+				$result_acesso = oci_parse($conn_ora,$cons_acesso_login);
+
+				$valida_acesso = oci_execute($result_acesso);
+
+				if($valida_acesso){
+
+					$_SESSION['usuarioLogin'] = $usuario;
+					$_SESSION['usuarioNome'] = $resultado[1];
+					$_SESSION['SN_CONTABILIDADE'] = $resultado[2];
+					$_SESSION['SN_VISUALIZACAO'] = $resultado[3];
+					header("Location: $pag_apos");
+
+				}
+
 			} else { 
 				$_SESSION['msgerro'] = $resultado[0] . '!';
 				header("Location: $pag_login");		
