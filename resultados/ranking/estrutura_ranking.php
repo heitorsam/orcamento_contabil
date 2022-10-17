@@ -1,6 +1,6 @@
 <?php 
 
-    $lista_resultado_ranking = "SELECT * FROM (SELECT res.VL_REALIZADO,st.ds_setor
+    echo $lista_resultado_ranking = "SELECT * FROM (SELECT res.VL_REALIZADO,st.ds_setor
                                     FROM orcamento_contabil.vw_resultado_desvio_teste res
                                     INNER JOIN orcamento_contabil.setor st
                                     ON st.cd_setor = res.cd_setor
@@ -37,7 +37,7 @@
     ?>
 
     <div class="fnd_azul" id="fnd_azul">     
-    <i class="fas fa-chart-line"></i> Ranking <?php echo $var_periodo_filtro; ?>
+    <i class="fas fa-chart-line"></i> Ranking <?php echo substr($var_periodo_filtro, -2) .'/'. substr($var_periodo_filtro, 0, 4); ?>
     </div>
 
     <div class="div_br"> </div>   
