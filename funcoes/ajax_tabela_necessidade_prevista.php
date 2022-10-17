@@ -32,7 +32,7 @@
 ?>
 
                 <td id="VL_NECESSIDADE_PREVISTA<?php echo @$row_prev['CD_NECESSIDADE_PREVISTA']; ?>"
-                ondblclick="fnc_editar_campo('portal_sesmt.NECESSIDADE_PREVISTA', 'VL_NECESSIDADE_PREVISTA', '<?php echo @$row_prev['VL_NECESSIDADE_PREVISTA']; ?>', 'CD_NECESSIDADE_PREVISTA', '<?php echo @$row_prev['CD_NECESSIDADE_PREVISTA']; ?>', '')"
+                ondblclick="fnc_editar_campo('orcamento_contabil.NECESSIDADE_PREVISTA', 'VL_NECESSIDADE_PREVISTA', '<?php echo @$row_prev['VL_NECESSIDADE_PREVISTA']; ?>', 'CD_NECESSIDADE_PREVISTA', '<?php echo @$row_prev['CD_NECESSIDADE_PREVISTA']; ?>', '')"
                 class='align-middle' style='text-align: center;'><?php echo @$row_prev['VL_NECESSIDADE_PREVISTA']; ?></td>
 
                 <td class='align-middle' style='text-align: center;'><a class="btn btn-danger" onclick="del_vl_previsto('<?php echo $row_prev['CD_NECESSIDADE_PREVISTA'] ; ?>')"><i class="fas fa-trash"></i> </a></td>

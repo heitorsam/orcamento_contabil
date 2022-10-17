@@ -123,7 +123,7 @@
         vl_prev = document.getElementById('frm_valor').value;
       
         //alert(periodo);
-        alert(vl_prev);
+        //alert(vl_prev);
 
         $.ajax({
             url: "funcoes/ajax_cad_result_prev.php",
