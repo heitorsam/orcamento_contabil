@@ -342,7 +342,7 @@
         @oci_execute($result_conta_contabil);
 
         if(@$var_setor != '' && @$var_setor != 'Todos'){
-            echo $consulta_usu_setor = "SELECT CD_USUARIO FROM orcamento_contabil.USUARIOS_SETOR WHERE CD_SETOR = $var_setor";
+            $consulta_usu_setor = "SELECT CD_USUARIO FROM orcamento_contabil.USUARIOS_SETOR WHERE CD_SETOR = $var_setor";
             $resultado_usu_setor  = oci_parse($conn_ora, $consulta_usu_setor);
             oci_execute($resultado_usu_setor);
             $usus = [];
