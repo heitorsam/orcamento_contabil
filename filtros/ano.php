@@ -5,6 +5,7 @@
     $consulta_ano = "SELECT DISTINCT SUBSTR(cc.PERIODO, 4, 4) AS ANO
                      FROM orcamento_contabil.conta_contabil cc
                      WHERE SUBSTR(cc.PERIODO, 4, 4) <> NVL('$var_ano', 0)
+                     AND SUBSTR(cc.PERIODO, 4, 4) >= 2022
                      ORDER BY SUBSTR(cc.PERIODO, 4, 4) DESC";
 
     $result_ano = oci_parse($conn_ora, $consulta_ano);    
