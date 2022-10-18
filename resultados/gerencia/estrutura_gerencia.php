@@ -342,10 +342,15 @@
         @oci_execute($result_conta_contabil);
 
         if(@$var_setor != '' && @$var_setor != 'Todos'){
-            $consulta_usu_setor = "SELECT CD_USUARIO FROM orcamento_contabil.USUARIOS_SETOR WHERE CD_SETOR = $var_setor";
+            echo $consulta_usu_setor = "SELECT CD_USUARIO FROM orcamento_contabil.USUARIOS_SETOR WHERE CD_SETOR = $var_setor";
             $resultado_usu_setor  = oci_parse($conn_ora, $consulta_usu_setor);
             oci_execute($resultado_usu_setor);
-            $row_usu_setor = oci_fetch_array($resultado_usu_setor);
+            $usus = [];
+            while($row_usu_setor = oci_fetch_array($resultado_usu_setor)){
+                array_push($usus ,$row_usu_setor['CD_USUARIO']);
+            }
+            
+
         }
 
         include 'modals/conta_contabil/modal_anexos_conta_contabil.php';
@@ -552,8 +557,9 @@
 
                     <td class='align-middle' style="text-align: center;background-color:<?php echo $color ?>!important; color:<?php echo $row_conta_contabil['COR_VARIACAO'] ?>!important;" >
                         <?php 
+                        
                             if(!isset($row_conta_contabil['JUSTIFICA_1'])){
-                                if(@in_array($_SESSION['usuarioLogin'], @$row_usu_setor)){
+                                if(@in_array($_SESSION['usuarioLogin'], @$usus)){
                                     $cor_just = '#E05757';
                                     $liberado = '';
                                 }else{
@@ -655,7 +661,7 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <?php if(@in_array(@$_SESSION['usuarioLogin'], @$row_usu_setor)){ ?>
+                                            <?php if(@in_array(@$_SESSION['usuarioLogin'], @$usus)){ ?>
                                                 Contextualização:
                                                 <textarea class="form-control" id="justficativa_1" rows="5" maxlength="3900"></textarea>
                                                 <div class="div_br"></div>
