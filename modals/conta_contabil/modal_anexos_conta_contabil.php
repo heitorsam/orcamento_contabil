@@ -6,7 +6,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Anexos </h5>
-                <button type="button" class="close" onclick="function (){ $('.modal-backdrop').remove() }" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" onclick="$('.modal-backdrop').remove()" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -18,7 +18,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"> <i class="fas fa-times"></i> Fechar</button>
+                <button type="button" class="btn btn-secondary" onclick="$('.modal-backdrop').remove()" data-dismiss="modal"> <i class="fas fa-times"></i> Fechar</button>
             </div>
         </div>
     </div>
