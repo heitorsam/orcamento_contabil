@@ -185,6 +185,7 @@
             var_div_filtro_mes.style.display = 'none';
             var_div_filtro_setor.style.display = 'inline';
             var_div_filtro_periodo.style.display = 'none';
+            var_div_filtro_reduzido.style.display = 'none';
 
             var_jv_filtro_ano.required = true;
             var_jv_filtro_visao.required = true;
@@ -220,6 +221,7 @@
             var_div_filtro_setor.style.display = 'none';
             var_div_filtro_visao.style.display = 'none';
             var_div_filtro_periodo.style.display = 'none';
+            var_div_filtro_reduzido.style.display = 'none';
 
             var_jv_filtro_ano.required = true;
             var_jv_filtro_visao.required = false;
@@ -237,6 +239,7 @@
             var_div_filtro_setor.style.display = 'none';
             var_div_filtro_visao.style.display = 'inline';
             var_div_filtro_periodo.style.display = 'inline';
+            var_div_filtro_reduzido.style.display = 'none';
 
             var_jv_filtro_ano.required = false;
             var_jv_filtro_visao.required = true;
