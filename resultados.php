@@ -3,9 +3,10 @@
     //CABECALHO
     include 'cabecalho.php';
 
-    //ACESSO RESTRITO
-    include 'acesso_restrito.php';
-
+    if(isset($_SESSION['usuarioLogin'])){
+        //ACESSO RESTRITO
+        include 'acesso_restrito.php';
+    }
     //CONEXAO
     include 'conexao.php';
 
@@ -36,8 +37,9 @@
     <!--TITULO-->
     <h11><i class="fa fa-bar-chart"></i> Resultados</h11>
     <span class="espaco_pequeno" style="width: 6px;" ></span>
+    <?php  if(isset($_SESSION['usuarioLogin'])){ ?>
     <h27> <a href="home.php" style="color: #444444; text-decoration: none;"> <i class="fa fa-reply" aria-hidden="true"></i> Voltar </a> </h27> 
-    
+    <?php } ?>
     <div class="div_br"> </div>       
 
     <!--MENSAGENS-->

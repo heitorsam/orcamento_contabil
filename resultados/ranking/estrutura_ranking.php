@@ -1,6 +1,6 @@
 <?php 
 
-    echo $lista_resultado_ranking = "SELECT * FROM (SELECT res.VL_REALIZADO,st.ds_setor
+    $lista_resultado_ranking = "SELECT * FROM (SELECT res.VL_REALIZADO,st.ds_setor
                                     FROM orcamento_contabil.vw_resultado_desvio_teste res
                                     INNER JOIN orcamento_contabil.setor st
                                     ON st.cd_setor = res.cd_setor
@@ -25,7 +25,7 @@
                                     AND rec.CLASSIFICACAO_CONTABIL = UPPER('RECEITA'))
                                     ORDER BY 1 ";
                                     if($var_visao == 'Despesa'){
-                                        $lista_resultado_ranking .= " ASC";
+                                        echo $lista_resultado_ranking .= " ASC";
                                     }else{
                                         $lista_resultado_ranking .= " DESC";
                                     }
