@@ -373,7 +373,7 @@
             <th class="align-middle" style="text-align: center !important;"><span>Realizado</span></th>
             <th class="align-middle" style="text-align: center !important;"><span>       Variação       </span></th>
             <th class="align-middle" style="text-align: center !important;"><span>   %Variação   </span></th>
-            <th class="align-middle" style="text-align: center !important;"><span>         Opções         </span></th>
+            <?php if(isset($_SESSION['usuarioLogin'])){ ?><th class="align-middle" style="text-align: center !important;"><span>         Opções         </span></th><?php } ?>
 
 
         </tr></thead>            
@@ -420,7 +420,7 @@
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['VARIACAO'], 2, ',', '.' ) . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @str_replace('||','"',$row_tt['SETA']); ?></span></th></span></th>
-                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <?php if(isset($_SESSION['usuarioLogin'])){ ?><th class="align-middle" style="text-align: center !important;"><span></span></th><?php } ?>
                        </tr> 
 
             <?php
@@ -451,7 +451,7 @@
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VL_REALIZADO'], 2, ',', '.' ); ?></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['VARIACAO'], 2, ',', '.' ) . @$row_tt_desp['SETA']; ?></span></th></span></th>
                            <th class="align-middle" style="text-align: center !important;"><span><?php echo @number_format(@$row_tt_desp['PORC_VARIACAO'], 2, ',', '.' ) . '%' . @$row_tt_desp['SETA']; ?></span></th></span></th>
-                           <th class="align-middle" style="text-align: center !important;"><span></span></th>
+                           <?php if(isset($_SESSION['usuarioLogin'])){ ?><th class="align-middle" style="text-align: center !important;"><span></span></th><?php } ?>
                         </tr> 
 
             <?php
@@ -555,7 +555,7 @@
                     </td>  
 
                     <!--  JUSTIFICATIVA  -->
-
+                    <?php if(isset($_SESSION['usuarioLogin'])){ ?>
                     <td class='align-middle' style="text-align: center;background-color:<?php echo $color ?>!important; color:<?php echo $row_conta_contabil['COR_VARIACAO'] ?>!important;" >
                         <?php 
                         
@@ -662,7 +662,8 @@
                             }
                         </script>
                     
-                    </td>  
+                    </td>
+                    <?php } ?>  
                     <div class="modal fade" id="modaljustificativa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
