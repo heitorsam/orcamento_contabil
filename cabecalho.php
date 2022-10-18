@@ -13,7 +13,7 @@ session_start();
     @$pri_nome = substr($nome, 0, strpos($nome, ' '));
     
     //ACESSO RESTRITO
-    if(@$_SESSION['usuaroiLogin'] != ''){
+    if(isset($_SESSION['usuarioLogin'])){
         include 'acesso_restrito.php';    
     }
 ?>
@@ -46,7 +46,7 @@ session_start();
     <header>    
 
         <nav class="navbar navbar-expand-md navbar-dark bg-color">
-            <a class="navbar-brand" <?php if(@$_SESSION['usuarioLogin'] != ''){ ?> href="home.php" <?php } ?>>
+            <a class="navbar-brand" <?php if(isset($_SESSION['usuarioLogin'])){ ?> href="home.php" <?php } ?>>
                 <img src="img/logo/icone_santa_casa_sjc_branco.png" height="28px" width="28px" class="d-inline-block align-top" alt="Santa Casa de São José dos Campos">
                 <h10>Orçamento Contábil</h10>
             </a>
@@ -64,7 +64,7 @@ session_start();
                     <li class="nav-item">
                         <h10><a class="nav-link" href="#"><i class="fa fa-question-circle-o" aria-hidden="true"></i> Faq</a></h10>
                     </li>
-                </div><?php if(@$_SESSION['usuarioLogin'] != ''){ ?>
+                </div><?php if(isset($_SESSION['usuarioLogin'])){ ?>
                 <div class="menu_preto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown06" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,16 +73,14 @@ session_start();
 
                         <!--MENU-->
                         <?php
-                        
+                        if(isset($_SESSION['usuarioLogin'])){
                             if($_SESSION['SN_CONTABILIDADE'] == 'S'  ) { ?>
-                            <a class="dropdown-item" style="background-color: #f3f3f3; " href="javascript:void(0)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Cadastros</a>  
                             <a class="dropdown-item" href="cadastro_setor.php"><i class="fa fa-building" aria-hidden="true"></i> Setor</a>   
                             <a class="dropdown-item" href="cadastro_grupo_orcado.php"><i class="fa fa-users" aria-hidden="true"></i> Grupo Orçado</a>   
                             <a class="dropdown-item" href="cadastro_result_prev.php"><i class="fa fa-line-chart" aria-hidden="true"></i> Resultado Previsto</a> 
                             <a class="dropdown-item" href="cadastro_conta_contabil.php"><i class="fa fa-archive" aria-hidden="true"></i> Conta Contábil</a>   
                             <a class="dropdown-item" href="duplicar_periodo.php"><i class="fas fa-copy" aria-hidden="true"></i> Duplicar Período</a>  
                         <?php } ?>
-                            <a class="dropdown-item" style="background-color: #f3f3f3; " href="javascript:void(0)"><i class="fa fa-bar-chart" aria-hidden="true"></i> Resultados</a>  
                             <a class="dropdown-item" href="resultados.php"><i class="fa fa-bar-chart" aria-hidden="true"></i> Resultados</a>   
 
                         <?php if(@$_SESSION['sn_admin'] == 'S'){ ?>
@@ -90,6 +88,7 @@ session_start();
                             <a class="dropdown-item" style="background-color: #f3f3f3;" href="javascript:void(0)" ><i class="fas fa-chart-line"></i> Administrador</a>
                             <a class="dropdown-item" style="background-color: #ffffff;" href="permissoes.php" ><i class="fas fa-cogs"></i> Resultados</a>
                         <?php }
+                        }
                          ?>
 
         <div class="div_br"> </div>
