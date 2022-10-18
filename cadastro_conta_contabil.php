@@ -307,10 +307,7 @@
                         ) AS SN_REPETIDO,
                         (vrc.VL_REALIZADO - vrc.VL_ORCADO) AS VL_VARIACAO,
 
-
                         (((vrc.VL_REALIZADO / NULLIF(vrc.VL_ORCADO,0)))-1)*100 AS VL_PORC_VARIACAO,
-
-
 
                         (SELECT SUM(aux.VL_REALIZADO)
                         FROM VW_RESULTADOS_CONSOLIDADOS aux
@@ -368,7 +365,8 @@
                             WHEN (vrc.VL_REALIZADO - vrc.VL_ORCADO) > 0 AND vrc.CLASSIFICACAO_CONTABIL = 'RECEITA' THEN 'green'
                             ELSE 'grey'
 
-                        END COR_VARIACAO                                 
+                        END COR_VARIACAO,
+                        (SELECT COUNT(*) AS QTD FROM orcamento_contabil.ANEXOS an WHERE an.CD_CONTA_CONTABIL = vrc.CD_CONTA_CONTABIL) AS QTD_ANEXOS                              
                                  FROM orcamento_contabil.VW_RESULTADOS_CONSOLIDADOS vrc
                                  WHERE vrc.PERIODO = '$var_periodo'";
 
@@ -500,13 +498,6 @@
 
                 }
 
-
-
-
-
-
-
-
                 if(!isset($row_conta_contabil['CD_GRUPO_ORCADO'])){
                     $color = 'rgba(0,0,0,0)';
                 }else{
@@ -624,7 +615,25 @@
                         <!--MODAL EDITAR CONTA-->
                         <?php //include 'modals/conta_contabil/modal_edit_conta_contabil.php'?>
                         
-                        <a class="btn btn-primary" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
+                        <!--ANEXOS-->
+                        <?php
+
+                            $var_qtd_anexo = $row_conta_contabil['QTD_ANEXOS'];
+
+                            if($var_qtd_anexo >= 1){
+
+                                $tp_btn = 'btn-primary';
+
+                            }else{
+
+                                $tp_btn = 'btn-danger';
+
+                            }
+
+                        ?>  
+
+
+                        <a class="btn <?php echo $tp_btn; ?>" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL']; ?>')"><i class="fas fa-link"></i></a>
 
                         <!-- EXCLUIR REALIZADO -->
                         <a class='btn btn-danger btn-xs' onclick="return confirm('Tem certeza que deseja excluir o realizado?')"
@@ -647,9 +656,7 @@
     </table>
     </div>
 
-<?php
-
-    
+<?php   
 
     //JAVASCRIPT EDITAR CAMPOS
     include 'funcoes/js_editar_campos.php';
@@ -659,7 +666,6 @@
 ?>
 
 <script>
-
                 function ajax_modal_anexos(cd_conta_contabil){
                     $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
                     $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
@@ -685,7 +691,4 @@
                     }
                     
                 }
-
-
-
 </script>

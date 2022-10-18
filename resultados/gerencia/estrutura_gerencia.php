@@ -316,7 +316,8 @@
                         st.cd_usuario AS USUARIO,
                         just.ds_justificativa_1 AS JUSTIFICA_1,
                         just.ds_justificativa_2 AS JUSTIFICA_2,
-                        just.ds_justificativa_3 AS JUSTIFICA_3
+                        just.ds_justificativa_3 AS JUSTIFICA_3,
+                        (SELECT COUNT(*) AS QTD FROM orcamento_contabil.ANEXOS an WHERE an.CD_CONTA_CONTABIL = vrc.CD_CONTA_CONTABIL) AS QTD_ANEXOS
                     FROM orcamento_contabil.VW_RESULTADOS_CONSOLIDADOS vrc
                     LEFT JOIN orcamento_contabil.setor st
                         ON vrc.CD_SETOR = st.cd_setor
@@ -640,7 +641,20 @@
                                 }
                             </script>
 
-                        <a class="btn btn-primary" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
+                        <!--ANEXOS-->
+                        <?php
+
+                            $var_qtd_anexo = $row_conta_contabil['QTD_ANEXOS'];
+
+                            if($var_qtd_anexo == 0){
+
+                                $tp_btn = 'background-color: #a6a6a6 !important; border-color: #a6a6a6 !important; color: #fff;';
+
+                            }
+
+                        ?>  
+                           
+                        <a class="btn btn-primary" style="<?php echo $tp_btn; ?>" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"><i class="fas fa-link"></i></a>
 
                         <script>
                             function ajax_modal_anexos(cd_conta_contabil){
