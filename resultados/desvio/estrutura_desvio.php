@@ -18,11 +18,12 @@
                                vrd.VL_ORCADO, vrd.VL_REALIZADO,
                                ROUND(NVL(vrd.VL_REALIZADO,0),0) AS VL_REALIZADO_ROUND,
                                ROUND(NVL(vrd.VL_ORCADO,0),0) AS VL_ORCADO_ROUND
-                               FROM orcamento_contabil.VW_RESULTADO_DESVIO_TESTE vrd
+                               FROM orcamento_contabil.VW_RESULTADO_DESVIO_SETOR vrd
                                WHERE vrd.ANO = $var_ano
                                AND vrd.CLASSIFICACAO_CONTABIL = UPPER('$var_visao')";
+
                                if($var_setor != 'Todos'){
-                               $lista_resultado_desvio .= " AND vrd.CD_SETOR = $var_setor";
+                                $lista_resultado_desvio .= " AND vrd.CD_SETOR = $var_setor";
                                }
                                                            
                                $lista_resultado_desvio .=" UNION ALL
@@ -33,25 +34,36 @@
                                NVL(rec.VL_REALIZADO - dep.VL_REALIZADO,0) AS VL_REALIZADO,
                                ROUND(NVL(rec.VL_REALIZADO - dep.VL_REALIZADO,0),0) AS VL_REALIZADO_ROUND,
                                ROUND(NVL(rec.VL_ORCADO - dep.VL_ORCADO,0),0) AS VL_ORCADO_ROUND
-                               FROM orcamento_contabil.VW_RESULTADO_DESVIO rec
-                               LEFT JOIN(SELECT rec.*
-                                   FROM orcamento_contabil.VW_RESULTADO_DESVIO rec
-                                   WHERE rec.ANO = $var_ano
+                               FROM orcamento_contabil.VW_RESULTADO_DESVIO_SETOR rec
+                               LEFT JOIN(SELECT aux.*
+                                   FROM orcamento_contabil.VW_RESULTADO_DESVIO_SETOR aux
+                                   WHERE aux.ANO = $var_ano
                                    AND 'RESULTADO' = UPPER('$var_visao')
-                                   AND rec.CLASSIFICACAO_CONTABIL = UPPER('DESPESA')
-                                   ) dep
-                               ON rec.ANO = dep.ANO
-                               AND rec.MES = dep.MES
-                               WHERE rec.ANO = $var_ano
-                               AND 'RESULTADO' = UPPER('$var_visao')
-                               AND rec.CLASSIFICACAO_CONTABIL = UPPER('RECEITA')
-                               ORDER BY 3 ASC) total
-                               GROUP BY total.ANO, total.MES, total.MES_ABV
-                               ORDER BY 2
-                               ) res
-                               LEFT JOIN orcamento_contabil.NECESSIDADE_PREVISTA np 
-                               ON np.PERIODO = res.MES || '/' || res.ANO
-                               ORDER BY res.ANO ASC, res.MES ASC";
+                                   AND aux.CLASSIFICACAO_CONTABIL = UPPER('DESPESA')";
+
+                                if($var_setor != 'Todos'){
+                                    $lista_resultado_desvio .= " AND aux.CD_SETOR = $var_setor";
+                                }
+                               
+                                $lista_resultado_desvio .=" ) dep
+                                ON rec.ANO = dep.ANO
+                                AND rec.MES = dep.MES
+                                AND rec.CD_SETOR = dep.CD_SETOR
+                                WHERE rec.ANO = $var_ano
+                                AND 'RESULTADO' = UPPER('$var_visao')";
+
+                                if($var_setor != 'Todos'){
+                                    $lista_resultado_desvio .= " AND rec.CD_SETOR = $var_setor";
+                                }
+
+                                $lista_resultado_desvio .= " AND rec.CLASSIFICACAO_CONTABIL = UPPER('RECEITA')
+                                ORDER BY 3 ASC) total
+                                GROUP BY total.ANO, total.MES, total.MES_ABV
+                                ORDER BY 2
+                                ) res
+                                LEFT JOIN orcamento_contabil.NECESSIDADE_PREVISTA np 
+                                ON np.PERIODO = res.MES || '/' || res.ANO
+                                ORDER BY res.ANO ASC, res.MES ASC";
 
     //echo $lista_resultado_desvio;
     

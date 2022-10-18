@@ -38,7 +38,7 @@
         labels: <?php echo $var_setor; ?>,
         datasets: [
             {
-            label: "Orçado",
+            label: "Valor",
             backgroundColor: "rgba(54, 162, 235, 0.5)",
             data: <?php echo $var_valor; ?>
             }
