@@ -88,6 +88,7 @@
                 <th class="align-middle" style="text-align: center !important;"><span>Resultado Previsto</span></th>
                 <th class="align-middle" style="text-align: center !important;"><span>Opções</span></th>
                 
+
             </tr></thead>            
 
             <tbody id="dados_tabela_result_prev">

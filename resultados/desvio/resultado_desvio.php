@@ -20,20 +20,7 @@
                                                                                             ?>
             </div>
             <div class="pivot_tr_conteudo">% DESVIO</div>
-            <div class="pivot_tr_conteudo">% DESVIO ACUMULADO</div>    
-            
-            <?php 
-                if($var_indicador == 'Desvio' && $var_setor == 'Todos' && $var_visao == 'Resultado'){
-
-            ?>
-
-                    <div class="pivot_tr_conteudo">NECESSIDADE PREVISTA</div>   
-                    <div class="pivot_tr_conteudo">% NECESSIDADE x REALIZADO</div> 
-                    
-            <?php 
-                }
-            ?>
-
+            <div class="pivot_tr_conteudo">% DESVIO ACUMULADO</div>         
         </td>
 
         <?php 
@@ -104,31 +91,6 @@
 
                 <div class="pivot_tr_conteudo" style="color: <?php echo $var_cor_variacao_acumulado; ?>"> <?php echo @number_format($porc_desvio_acumulado, 2, ',', '.' ) . '%'; ?> </div>                  
 
-            <?php 
-
-                //NECESSIDADE PREVISTA
-                if($var_indicador == 'Desvio' && $var_setor == 'Todos' && $var_visao == 'Resultado'){
-
-                    @$porc_ness = ROUND((($row_desvio['VL_REALIZADO_ROUND'] - $row_desvio['VL_NECESSIDADE_PREVISTA_ROUND']) / $row_desvio['VL_NECESSIDADE_PREVISTA_ROUND']) * 100,2);
-
-                    $var_cor_variacao_ness = 'red';
-
-                    if($porc_ness >= 0){
-
-                        $var_cor_variacao_ness = 'green';
-
-                    }                   
-
-            ?>
-                    <div class="pivot_tr_conteudo"> <?php echo @number_format($row_desvio['VL_NECESSIDADE_PREVISTA'], 2, ',', '.' ); ?> </div>
-                    <div class="pivot_tr_conteudo" style="color: <?php echo $var_cor_variacao_ness; ?>"> <?php echo @number_format($porc_ness, 2, ',', '.' ) . '%'; ?> </div>  
-
-            <?php 
-
-                }
-            
-            ?>
-
             </td>
 
         <?php   
@@ -147,7 +109,6 @@
                         $var_cor_variacao_total = 'green';
                     }   
                 }
-            
             }
     
         ?>
