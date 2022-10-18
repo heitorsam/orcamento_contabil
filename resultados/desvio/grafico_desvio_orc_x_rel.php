@@ -10,15 +10,12 @@
     $var_mes = '[';
     $var_orcado = '[';
     $var_realizado = '[';
-<<<<<<< HEAD
 
     if($var_indicador == 'Desvio' && $var_setor == 'Todos' && $var_visao == 'Resultado'){
 
         $var_previsto = '[';
 
     }
-=======
->>>>>>> parent of da73053 (Merge branch 'main' of https://github.com/heitorsam/orcamento_contabil)
 
     @oci_execute($result_resultado_desvio); 
 
@@ -29,15 +26,12 @@
     $var_mes .= "'" . $row_desvio['MES_ABV'] . "',";
     $var_orcado .= "'" .$row_desvio['VL_ORCADO_ROUND'] . "',";
     $var_realizado .= "'" . $row_desvio['VL_REALIZADO_ROUND'] . "',";
-<<<<<<< HEAD
 
     if($var_indicador == 'Desvio' && $var_setor == 'Todos' && $var_visao == 'Resultado'){
 
         $var_previsto .= "'" . $row_desvio['VL_NECESSIDADE_PREVISTA_ROUND'] . "',";
 
     }
-=======
->>>>>>> parent of da73053 (Merge branch 'main' of https://github.com/heitorsam/orcamento_contabil)
 
 } 
 
@@ -45,15 +39,12 @@
     $var_mes .= ']';
     $var_orcado .= ']';
     $var_realizado .= ']';
-<<<<<<< HEAD
 
     if($var_indicador == 'Desvio' && $var_setor == 'Todos' && $var_visao == 'Resultado'){
 
         $var_previsto .= ']';
 
     }
-=======
->>>>>>> parent of da73053 (Merge branch 'main' of https://github.com/heitorsam/orcamento_contabil)
 
 ?>
 
@@ -72,7 +63,6 @@
             label: "Realizado",
             backgroundColor: "rgba(255, 99, 132, 0.5)",
             data: <?php echo $var_realizado; ?>
-<<<<<<< HEAD
             }
             
             <?php 
@@ -95,9 +85,6 @@
 
 
             
-=======
-            }
->>>>>>> parent of da73053 (Merge branch 'main' of https://github.com/heitorsam/orcamento_contabil)
         ]
         },
         options: {
