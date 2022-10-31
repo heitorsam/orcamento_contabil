@@ -31,6 +31,7 @@ $currentDir = getcwd();
       $extensao_arquivo = strrchr( $fileName, '.' );
 
       echo $nome_arquivo_personalizado = $_FILES['fileAjax']['name'];
+      $nome_arquivo_personalizado = str_replace(' ', '_', $nome_arquivo_personalizado);
       $uploadPath = $currentDir . $uploadDirectory . basename($fileName);
 
       //DECLARANDO VARIAVEIS DO ARQUIVO PARA IMPORTACAO PARA O BANCO
