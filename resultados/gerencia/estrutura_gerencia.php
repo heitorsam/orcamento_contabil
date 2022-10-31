@@ -703,7 +703,7 @@
                                 <div class="modal-footer">
                                     
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Fechar</button>
-                                    <?php if(@in_array(@$_SESSION['usuarioLogin'], @$row_usu_setor)){ ?>
+                                    <?php if(@in_array(@$_SESSION['usuarioLogin'], @$usus)){ ?>
                                     <button type="button" class="btn btn-primary" onclick="cad_just()"><i class="fas fa-save"></i> Salvar</button>
                                     <?php } ?>
                                 </div>
