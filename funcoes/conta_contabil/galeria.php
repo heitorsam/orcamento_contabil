@@ -24,7 +24,7 @@
 
 
 
-                        <!--<object class="img_foto_pequena" data="data:application/pdf;base64,<?php echo $imagem; ?>" type="application/pdf" ></object>
+                        <!--<object class="img_foto_pequena" data="data:application/pdf;base64,<?php //echo $imagem; ?>" type="application/pdf" ></object>
                         <div class="btn btn-primary">visualizar</div>-->
                         <img src="img/pdf_pequeno.jpg" class="img_foto_pequena">  
 

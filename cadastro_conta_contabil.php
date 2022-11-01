@@ -97,9 +97,9 @@
 
     <?php 
 
-        //////////////////////////////////////////
-        ////LISTAR TOTALIZADOR CONTA CONTABIL/////
-        //////////////////////////////////////////
+       //////////////////////////////////////////
+       ////LISTAR TOTALIZADOR CONTA CONTABIL/////
+       //////////////////////////////////////////
  
        $lista_totalizador = "SELECT res.PERIODO,
                              CASE 
@@ -117,8 +117,7 @@
                              res.VL_ORCADO, res.VL_REALIZADO,
                              (res.VL_REALIZADO - res.VL_ORCADO)AS VARIACAO,
                              (ROUND(((res.VL_REALIZADO / NULLIF(res.VL_ORCADO,0)) - 1) * 100,2)) AS PORC_VARIACAO
-                             
-                             
+                                                          
                              FROM(
 
                              SELECT DISTINCT tt.PERIODO, 'RESULTADO' AS CLASSIFICACAO_CONTABIL, 
@@ -206,7 +205,6 @@
 
         //echo $lista_totalizador;
        
-
         $result_totalizador = oci_parse($conn_ora, $lista_totalizador);
 
         @oci_execute($result_totalizador);
@@ -288,6 +286,8 @@
                                    AND res.CLASSIFICACAO_CONTABIL = 'DESPESA'
                                   ORDER BY 2 ASC";
 
+            $lista_totalizador_desp;
+            
             $result_totalizador_desp = oci_parse($conn_ora, $lista_totalizador_desp);
 
             @oci_execute($result_totalizador_desp);
@@ -379,7 +379,6 @@
 
                                  $lista_conta_contabil .= " ORDER BY vrc.CLASSIFICACAO_CONTABIL DESC, vrc.DS_SETOR ASC, vrc.ORDEM ASC, vrc.CD_CONTA_MV ASC";
 
-        
         //echo $lista_conta_contabil;
         
         $result_conta_contabil = oci_parse($conn_ora, $lista_conta_contabil);
@@ -440,7 +439,6 @@
                             }
                         
                         ?>
-
                       
                            <!--COLUNAS-->
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
@@ -459,7 +457,6 @@
 
             <?php
        
-
                     }
 
 
@@ -489,8 +486,7 @@
                            <th class="align-middle" style="text-align: center !important;"><span></span></th>
                        </tr> 
 
-            <?php
-       
+            <?php       
 
                     }
 
@@ -581,7 +577,6 @@
                         ?>
 
                     </td>  
-
                                         
                     <!-- MODAL EDITAR/EXCLUIR REALIZADO -->
                     <td class="align-middle" style="text-align: center !important; background-color:<?php echo $color ?>!important;">
@@ -632,7 +627,6 @@
 
                         ?>  
 
-
                         <a class="btn <?php echo $tp_btn; ?>" data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL']; ?>')"><i class="fas fa-link"></i></a>
 
                         <!-- EXCLUIR REALIZADO -->
@@ -666,29 +660,31 @@
 ?>
 
 <script>
-                function ajax_modal_anexos(cd_conta_contabil){
-                    $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
-                    $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
-                }
 
-                function ajax_apagar_anexo(cd_conta_contabil, cd_anexo){
-                    $resultado = confirm('Realmente deseja apagar esse anexo?')
-                    if($resultado == true){
-                        $.ajax({
-                            url: "funcoes/conta_contabil/ajax_apagar_anexo.php",
-                            type: "POST",
-                            data: {
-                                cd_anexo:cd_anexo		
-                                },
-                            cache: false,
-                            success: function(dataResult){                    
-                            
-                                $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
-                                $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)        
-    
-                            }
-                        });
-                    }
-                    
+    function ajax_modal_anexos(cd_conta_contabil){
+        $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+        $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+    }
+
+    function ajax_apagar_anexo(cd_conta_contabil, cd_anexo){
+        $resultado = confirm('Realmente deseja apagar esse anexo?')
+        if($resultado == true){
+            $.ajax({
+                url: "funcoes/conta_contabil/ajax_apagar_anexo.php",
+                type: "POST",
+                data: {
+                    cd_anexo:cd_anexo		
+                    },
+                cache: false,
+                success: function(dataResult){                    
+                
+                    $('#div_carrosel').load('funcoes/conta_contabil/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
+                    $('#div_anexos').load('funcoes/conta_contabil/ajax_modal_anexos.php?cd_conta_contabil='+cd_conta_contabil)        
+
                 }
+            });
+        }
+        
+    }
+
 </script>
