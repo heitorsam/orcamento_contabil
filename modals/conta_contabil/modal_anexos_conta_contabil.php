@@ -13,7 +13,8 @@
             <div class="modal-body">
                 <div id="div_carrosel"></div>
                 </br>
-                <div class="row" id="div_anexos"></div>
+                
+                <div id="div_anexos"></div>
                 
             </div>
 
