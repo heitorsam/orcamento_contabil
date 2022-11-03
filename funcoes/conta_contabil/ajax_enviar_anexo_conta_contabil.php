@@ -6,11 +6,9 @@ session_start();
 include_once("../../conexao.php");
 
 //INFORMACOES DO USUARIO
-@$login_usuario = $_SESSION['usuarioLogin'];
-
-@$cd_documento_conta_contabil = $_POST['cd_documento_conta_contabil'];
-echo @$ds_doc = $_POST['ds_doc'];
-print_r($_FILES);
+$login_usuario = $_SESSION['usuarioLogin'];
+$cd_documento_conta_contabil = $_POST['cd_conta_contabil'];
+//$ds_doc = $_POST['ds_doc'];
 
 $currentDir = getcwd();
     $uploadDirectory = "uploads/";
@@ -21,36 +19,40 @@ $currentDir = getcwd();
     // Available file extensions
     $fileExtensions = ['jpeg','jpg','png','pdf'];
 
+    $tamanho = 1024 * 1024;
+
     //print_r($_FILES);
 
    if(!empty($_FILES['fileAjax'] != null)) {
-      $fileName = $_FILES['fileAjax']['name'];
-      echo $fileTmpName  = $_FILES['fileAjax']['tmp_name'];
-      $fileType = $_FILES['fileAjax']['type'];
-      $fileExtension = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
-      $extensao_arquivo = strrchr( $fileName, '.' );
+        $file = $_FILES['fileAjax'];
+        print_r($file);
+        $fileName = $file['name'];
+        $fileTmpName  = $file['tmp_name'];
+        $fileExtension = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
+        $nome_arquivo_personalizado = $file['name'];
+        //$nome_arquivo_personalizado = str_replace(' ', '_', $nome_arquivo_personalizado);
 
-      echo $nome_arquivo_personalizado = $_FILES['fileAjax']['name'];
-      $nome_arquivo_personalizado = str_replace(' ', '_', $nome_arquivo_personalizado);
-      $uploadPath = $currentDir . $uploadDirectory . basename($fileName);
-
-      //DECLARANDO VARIAVEIS DO ARQUIVO PARA IMPORTACAO PARA O BANCO
-      $image = file_get_contents($_FILES['fileAjax']['tmp_name']);
-
+        //DECLARANDO VARIAVEIS DO ARQUIVO PARA IMPORTACAO PARA O BANCO
+        $image = file_get_contents($file['tmp_name']);
         if (isset($fileName)) {
-            if (! in_array($fileExtension,$fileExtensions)) {
+            if (!in_array($fileExtension,$fileExtensions)) {
                 $errors[] = "São suportadas somente imagens JPEG, JPG and PNG e arquivos PDF.";
             }
+            if($file['size'] >= $tamanho){
+                $_SESSION['msgerro'] = "Arquivo muito grande!";
+                $errors[] = "Arquivo muito grande!";
+    
+            }
             if (empty($errors)) {
-                echo $didUpload = move_uploaded_file($fileTmpName, $uploadPath);
-                if ($didUpload) {
-                    echo "A imagem " . basename($fileName) . " foi enviada.";
-                } else {
-                    echo "Um erro ocorreu no envio dos dados. Tente Novamente.";
-                }
+                //echo $didUpload =;
+                
+                echo "A imagem " . basename($fileName) . " foi enviada.";
+
             } else {
                 foreach ($errors as $error) {
                     echo $error . "Ocorreu o seguinte erro: " . "\n";
+                    header('Location: ../../cadastro_conta_contabil.php');
+
                 }
             }
         }
@@ -87,17 +89,28 @@ if(empty($errors)){
    oci_execute($result_insert_AD, OCI_DEFAULT);
 
    if(!$blob->save($image)) {
-      oci_rollback($conn_ora);
+        oci_rollback($conn_ora);
    }
    else {
-      oci_commit($conn_ora);
+    
+        oci_commit($conn_ora);
    }
 
-   oci_free_statement($result_insert_AD);
+   $valida = oci_free_statement($result_insert_AD);
    $blob->free();
   
-   
+   if(isset($valida)){
+    header('Location: ../../cadastro_conta_contabil.php');
+   }else{
+    $_SESSION['msgerro'] = "Ocorreu um erro!";
+   }
    echo '</br>';
+
+   /*$stmt = $conn_ora->prepare($consulta_insert_AD);
+   $fp = fopen($file['tmp_name'], 'rb');
+
+   $stmt ->bindParam(":image",$fp,PDO::PARAM_LOB);
+   $stmt ->execute();*/
 
    
 }
