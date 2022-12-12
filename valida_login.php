@@ -56,6 +56,7 @@
 
 				$cons_acesso_login="INSERT INTO portal_projetos.ACESSO
 				SELECT portal_projetos.SEQ_CD_ACESSO.NEXTVAL AS CD_ACESSO,
+				9 AS CD_PORTFOLIO,
 				'ORÇAMENTO CONTÁBIL' AS DS_PROJETO,
 				'$usuario' AS CD_USUARIO_ACESSO,
 				SYSDATE AS HR_ACESSO
