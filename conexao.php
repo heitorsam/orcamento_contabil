@@ -18,8 +18,23 @@
 
 //PRODUCAO
 
-$dbstr1 ="(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST =10.200.0.211)(PORT = 1521))
-(CONNECT_DATA = (SERVICE_NAME = prdmv)))";
+$dbstr1 ="(DESCRIPTION =
+(ADDRESS = (PROTOCOL = TCP)(HOST = 10.200.0.211)(PORT = 1521))
+(ADDRESS = (PROTOCOL = TCP)(HOST = 10.200.0.212)(PORT = 1521))
+(LOAD_BALANCE = yes)
+(FAILOVER=ON)
+(CONNECT_DATA =
+  (SERVER = DEDICATED)
+  (SERVICE_NAME = prdmv)
+  (FAILOVER_MODE =
+  (TYPE = SELECT)
+  (METHOD = BASIC)
+  (RETRIES = 10)
+  (DELAY = 1)
+  )
+)
+)";
+
 
 //Criar a conexao ORACLE
 if(!@($conn_ora = oci_connect('orcamento_contabil','pepita_05052022_sjc_1555',$dbstr1,'AL32UTF8'))){

@@ -646,19 +646,38 @@
 
                             $var_qtd_anexo = $row_conta_contabil['QTD_ANEXOS'];
 
-                            if($var_qtd_anexo == 0){
+                            if($var_qtd_anexo < 1){
 
                                 $tp_btn = 'background-color: #a6a6a6 !important; border-color: #a6a6a6 !important; color: #fff;';
+
+                            }else{
+
+                                $tp_btn = '';
 
                             }
 
                         ?>  
                            
-                        <a class="btn btn-primary" style="<?php echo $tp_btn; ?>" <?php if($var_qtd_anexo > 0){ ?> data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')" <?php } ?>><i class="fas fa-link"></i></a>
+                        <a class="btn btn-primary" style=" <?php echo $tp_btn; ?>" 
+
+                            <?php if($var_qtd_anexo > 0){ ?> 
+                                    data-toggle="modal" data-target="#anexos_conta_contabil" onclick="ajax_modal_anexos('<?php echo $row_conta_contabil['CD_CONTA_CONTABIL'] ?>')"
+                            <?php } ?>>
+                            
+                            <i class="fas fa-link"></i>
+                                                                
+                            <?php if($var_qtd_anexo < 10){
+                                echo '0' . $var_qtd_anexo;
+                                }else{
+                                    echo $var_qtd_anexo;
+                                }    
+                            ?> 
+                            
+                        </a>
 
                         <script>
                             function ajax_modal_anexos(cd_conta_contabil){
-                                alert(cd_conta_contabil)
+                                //alert(cd_conta_contabil)
                                 $('#div_carrosel').load('resultados/gerencia/ajax_galeria_anexos.php?cd_conta_contabil='+cd_conta_contabil)
                             }
                         </script>
